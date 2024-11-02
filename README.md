@@ -5,7 +5,7 @@ packagist:
 https://packagist.org/packages/dotainion/query-permission
 
 install:
-composer require dotainion/query-permission --ignore-platform-reqs
+composer require dotainion/security-tools --ignore-platform-reqs
 
 update for tag version
 delete all local files:
