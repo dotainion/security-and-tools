@@ -57,6 +57,12 @@ class Env{
         return $_SERVER['REQUEST_URI'];
     }
 
+    public static function baseDir(){
+        $directory = str_replace(self::rootDir(), '', __DIR__);
+        $directory = str_replace('\\', '/', $directory);
+        return array_values(array_filter(explode('/', $directory), fn($dir)=>!empty($dir)))[0];
+    }
+
     public static function headers($key=null){
         $headers = getallheaders();
         if($key === null){
@@ -71,15 +77,18 @@ class Env{
     public static function authorizationHeader():?string{
         return self::headers('Authorization');
     }
+
+    public static function dotEnv():string{
+        return self::baseDir() . '/.env';
+    }
     
     public static function parseEnvFile() {
-        $filePath = self::rootDir() . '/.env';
-        if (!file_exists($filePath)) {
+        if (!file_exists(self::dotEnv())) {
             throw new Exception("The .env file does not exist.");
         }
     
         $variables = [];
-        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $lines = file(self::dotEnv(), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     
         foreach ($lines as $line) {
             if (trim($line) === '') {
