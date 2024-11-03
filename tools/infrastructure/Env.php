@@ -73,7 +73,7 @@ class Env{
     }
     
     public static function parseEnvFile() {
-        $filePath = __DIR__ . '/../../.env';
+        $filePath = self::rootDir() . '/.env';
         if (!file_exists($filePath)) {
             throw new Exception("The .env file does not exist.");
         }
