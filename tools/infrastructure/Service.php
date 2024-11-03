@@ -15,6 +15,9 @@ class Service extends Request{
     protected array $_excluded = [
         '__construct'
     ];
+    protected array $_unset = [
+        'password'
+    ];
 
     public function __construct(bool $authCheck=true){
         $this->__REQUEST__();
@@ -48,40 +51,34 @@ class Service extends Request{
         return true;
     }
 
-    public function setRelationship($data){
-        if($data instanceof Collector){
-            foreach($data->list() as $object){
-                $this->relationships->add($this->toJson($object));
-            }
-        }else if ($data instanceof IObjects){
-            $this->relationships->add($this->toJson($data));
-        }else{
-            throw new Exception('Service response receive a object and dont know what to do with it.');
-        }
+    public function setRelationship($data):self{
+        return $this->appendData($data, $this->relationships);
     }
 
-    public function setOutput($data){
-        if($data instanceof Collector){
-            foreach($data->list() as $object){
-                $this->collector->add($this->toJson($object));
-            }
-        }else if ($data instanceof IObjects){
-            $this->collector->add($this->toJson($data));
-        }else{
-            throw new Exception('Service response receive a object and dont know what to do with it.');
-        }
+    public function setOutput($data):self{
+        return $this->appendData($data, $this->collector);
     }
 
-    public function setMeta($data){
+    public function setMeta($data):self{
+        return $this->appendData($data, $this->meta);
+    }
+
+    public function success():self{
+        $this->collector->add(['status' => 'success']);
+        return $this;
+    }
+
+    private function appendData($data, Collector &$collector):self{
         if($data instanceof Collector){
             foreach($data->list() as $object){
-                $this->meta->add($this->toJson($object));
+                $collector->add($this->toJson($object));
             }
         }else if ($data instanceof IObjects){
-            $this->meta->add($this->toJson($data));
+            $collector->add($this->toJson($data));
         }else{
             throw new Exception('Service response receive a object and dont know what to do with it.');
         }
+        return $this;
     }
 
     public function relationship():Collector{
@@ -96,22 +93,25 @@ class Service extends Request{
         return $this->meta;
     }
 
-    public function mergeOutput(Service $service):void{
+    public function mergeOutput(Service $service):self{
         foreach($service->output()->list() as $output){
             $this->collector->add($output);
         }
+        return $this;
     }
 
-    public function mergeMeta(Service $service):void{
+    public function mergeMeta(Service $service):self{
         foreach($service->relationship()->list() as $meta){
             $this->meta->add($meta);
         }
+        return $this;
     }
 
-    public function mergeRelationship(Service $service):void{
+    public function mergeRelationship(Service $service):self{
         foreach($service->relationship()->list() as $relationship){
             $this->relationships->add($relationship);
         }
+        return $this;
     }
 
     public function sendResponse(){
@@ -141,7 +141,11 @@ class Service extends Request{
         foreach(get_class_methods($object) as $method){
             try{
                 if(!in_array($method, $this->_excluded) && !str_contains($method, 'set') && !str_contains($method, 'new')){
-                    $json[$method] = $this->dataType($object->$method());
+                    if(in_array($method, $this->_unset)){
+                        $json[$method] = null;
+                    }else{
+                        $json[$method] = $this->dataType($object->$method());
+                    }
                 }
             }catch(Throwable $ex){
                 if($object->$method() instanceof Collector){

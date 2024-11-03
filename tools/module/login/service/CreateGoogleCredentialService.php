@@ -33,6 +33,6 @@ class CreateGoogleCredentialService extends Service{
 
         $this->credential->create($credential);
         
-        return $this;
+        return $this->success();
     }
 }

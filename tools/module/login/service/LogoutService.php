@@ -15,7 +15,6 @@ class LogoutService extends Service{
     public function process(){
         $user = $this->manager->user();
         $this->manager->logout();
-        $this->setOutput($user);
-        return $this;
+        return $this->setOutput($user);
     }
 }

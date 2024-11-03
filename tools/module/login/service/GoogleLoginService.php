@@ -16,8 +16,6 @@ class GoogleLoginService extends Service{
         
         $this->security->googleLogin($accessToken);
         
-        $this->setOutput($this->security->user());
-        
-        return $this;
+        return $this->setOutput($this->security->user());
     }
 }

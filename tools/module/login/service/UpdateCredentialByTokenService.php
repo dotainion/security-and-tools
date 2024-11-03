@@ -7,15 +7,12 @@ use tools\infrastructure\Password;
 use tools\infrastructure\Service;
 use tools\infrastructure\Token;
 use tools\module\login\logic\UpdateCredential;
-use tools\module\user\logic\FetchUser;
 
 class UpdateCredentialByTokenService extends Service{
-    protected FetchUser $fetch;
     protected UpdateCredential $credential;
 
     public function __construct(){
         parent::__construct(false);
-        $this->fetch = new FetchUser();
         $this->credential = new UpdateCredential();
     }
     
@@ -34,9 +31,6 @@ class UpdateCredentialByTokenService extends Service{
         $this->credential->updateByToken($userId, $passwordObj, $token);
         $this->credential->unsetTokenRefreshToken($userId, $token);
 
-        $collector = $this->fetch->user($userId);
-        $this->setOutput($collector);
-
-        return $this;
+        return $this->success();
     }
 }

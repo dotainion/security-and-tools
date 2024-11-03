@@ -15,8 +15,7 @@ class FetchSessionService extends Service{
         Assert::validToken($token, 'Invalid token');
 
         if($this->security()->authenticated(new Token($token))){
-            $this->setOutput($this->security()->user());
-            return $this;
+            return $this->setOutput($this->security()->user());
         }
         
         throw new NotAuthenticatedException('Your are not authenticted.');

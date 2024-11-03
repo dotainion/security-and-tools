@@ -38,7 +38,6 @@ class LoginService extends Service{
 
         $this->security->login($identifier, $passwordObj);
         
-        $this->setOutput($this->security->user());
-        return $this;
+        return $this->setOutput($this->security->user());
     }
 }

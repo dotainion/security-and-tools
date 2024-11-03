@@ -29,6 +29,6 @@ class UpdateCredentialService extends Service{
 
         $this->creds->updatecredential($userId, $currentPasswordObj, $passwordObj);
         
-        return $this;
+        return $this->success();
     }
 }
