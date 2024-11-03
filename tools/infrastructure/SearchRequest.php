@@ -77,7 +77,7 @@ class SearchRequest extends Request{
 
         $where = [];
         foreach($reflect->getMethods() as $method){
-            if(in_array($method->getName(), ['uuid', 'hasArgs', 'where'])){
+            if(in_array($method->getName(), $this->deniedMethods)){
                 continue;
             }
             if($this->{$method->getName()}() !== null){
