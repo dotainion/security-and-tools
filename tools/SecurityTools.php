@@ -1,6 +1,7 @@
 <?php
 namespace tools;
 
+use tools\infrastructure\Service;
 use tools\module\login\service\CreateCredentialService;
 use tools\module\login\service\CreateGoogleCredentialService;
 use tools\module\login\service\FetchSessionService;
@@ -16,40 +17,40 @@ class SecurityTools{
         
     }
 
-    public function createCredential(string $id, string $password):void{
-        (new CreateCredentialService())->process($id, $password);
+    public function createCredential(string $id, string $password):Service{
+        return (new CreateCredentialService())->process($id, $password);
     }
 
-    public function createGoogleCredential(string $id):void{
-        (new CreateGoogleCredentialService())->process($id);
+    public function createGoogleCredential(string $id):Service{
+        return (new CreateGoogleCredentialService())->process($id);
     }
 
-    public function getSession(string $token):void{
-        (new FetchSessionService())->process($token);
+    public function getSession(string $token):Service{
+        return (new FetchSessionService())->process($token);
     }
 
-    public function googleLogin(string $accessToken):void{
-        (new GoogleLoginService())->process($accessToken);
+    public function googleLogin(string $accessToken):Service{
+        return (new GoogleLoginService())->process($accessToken);
     }
 
-    public function signIn(string $email, string $phone, string $password):void{
-        (new LoginService())->process($email, $phone, $password);
+    public function signIn(string $email, string $phone, string $password):Service{
+        return (new LoginService())->process($email, $phone, $password);
     }
 
-    public function signOut():void{
-        (new LogoutService())->process();
+    public function signOut():Service{
+        return (new LogoutService())->process();
     }
 
-    public function sendEmailRecovery(string $email):void{
-        (new SendRecoverEmailService())->process($email);
+    public function sendEmailRecovery(string $email, string $userId):Service{
+        return (new SendRecoverEmailService())->process($email, $userId);
     }
 
-    public function updateCredentialByToken(string $id, string $password, string $refreshToken):void{
-        (new UpdateCredentialByTokenService())->process($id, $password, $refreshToken);
+    public function updateCredentialByToken(string $id, string $password, string $refreshToken):Service{
+        return (new UpdateCredentialByTokenService())->process($id, $password, $refreshToken);
     }
 
-    public function updateCredential(string $id, string $password, string $currentPassword):void{
-        (new UpdateCredentialService())->process($id, $password, $currentPassword);
+    public function updateCredential(string $id, string $password, string $currentPassword):Service{
+        return (new UpdateCredentialService())->process($id, $password, $currentPassword);
     }
 }
 
