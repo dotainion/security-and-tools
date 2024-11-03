@@ -4,6 +4,17 @@ namespace tools\infrastructure;
 use ReflectionClass;
 
 class SearchRequest extends Request{
+
+    protected array $deniedMethods = [
+        '__REQUEST__',
+        'request',
+        'uuid', 
+        'hasArgs', 
+        'where',
+        'isPost',
+        'file',
+        'get',
+    ];
     
     public function __construct(){
         parent::__construct();
@@ -66,9 +77,6 @@ class SearchRequest extends Request{
 
         $where = [];
         foreach($reflect->getMethods() as $method){
-            if($method->class !== $reflect->getName()){
-                continue;
-            }
             if(in_array($method->getName(), ['uuid', 'hasArgs', 'where'])){
                 continue;
             }
