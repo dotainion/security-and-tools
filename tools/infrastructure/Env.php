@@ -79,7 +79,7 @@ class Env{
     }
 
     public static function dotEnv():string{
-        return self::baseDir() . '/.env';
+        return self::rootDir() . '/' . self::baseDir() . '/.env';
     }
     
     public static function parseEnvFile() {
