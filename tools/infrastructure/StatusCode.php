@@ -23,6 +23,7 @@ class StatusCode{
     protected int $PAYMENT_REQUIRED = 402;
     protected int $FORBIDDEN = 403;
     protected int $NOT_FOUND = 404;
+    protected int $METHOD_NOT_ALLOWED = 405;
     protected int $INTERNAL_SERVER_ERROR = 500;
     protected int $SERVICE_UNAVAILABLE = 503;
 
@@ -112,7 +113,7 @@ class StatusCode{
             $this->setCode($this->FORBIDDEN);
             $this->setMessage($ex->getMessage());
         }catch (PermissionException $ex){
-            $this->setCode($this->FORBIDDEN);
+            $this->setCode($this->METHOD_NOT_ALLOWED);
             $this->setMessage($ex->getMessage());
         }catch (Exception $ex){
             $this->setCode($this->INTERNAL_SERVER_ERROR);
