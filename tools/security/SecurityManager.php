@@ -61,10 +61,6 @@ class SecurityManager{
         $this->startSession($credential);
     }
 
-    public function hasSession(): bool{
-        return (array_key_exists(Session::key(), $_SESSION) && unserialize($_SESSION[Session::key()]) !== false);
-    }
-
     public function hasValidAccessToken():bool{
         $token = new Token();
         $authorizationToken = $this->env->authorizationHeader();
@@ -91,7 +87,7 @@ class SecurityManager{
     }
 
     public function assertUserAccess():bool{
-        if(!$this->hasValidAccessToken()){
+        if(!$this->hasValidAccessToken() && !Session::hasSession()){
             throw new NotAuthenticatedException('You are not logged in.');
         }
         if(!Session::session() instanceof ICredential || !Session::session()->token()){
@@ -112,7 +108,7 @@ class SecurityManager{
 
     public function authenticated(Token $token):bool{
         //this is use for service like fetch session
-        if($this->hasSession() &&  Session::session()->token()->toString() === $token->toString() || $this->hasValidAccessToken()){
+        if(Session::hasSession() && Session::session()->token()->toString() === $token->toString() || $this->hasValidAccessToken()){
             $this->assertUserAccess();
             return true;
         }

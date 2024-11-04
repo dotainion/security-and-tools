@@ -27,4 +27,7 @@ class Session{
         return $session;
     }
 
+    public static function hasSession(): bool{
+        return (array_key_exists(Session::key(), $_SESSION) && unserialize($_SESSION[Session::key()]) !== false);
+    }
 }
