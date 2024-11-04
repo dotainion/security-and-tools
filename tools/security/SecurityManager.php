@@ -90,18 +90,11 @@ class SecurityManager{
         return Session::user();
     }
 
-    public function isLoggedIn():bool{
-        if($this->hasValidAccessToken()){
-            return true;
-        }
-        if(!Session::session() instanceof ICredential || !Session::session()->token()){
+    public function assertUserAccess():bool{
+        if(!$this->hasValidAccessToken()){
             throw new NotAuthenticatedException('You are not logged in.');
         }
-        return true;
-    }
-
-    public function assertUserAccess():bool{
-        if(!$this->isLoggedIn()){
+        if(!Session::session() instanceof ICredential || !Session::session()->token()){
             throw new NotAuthenticatedException('You are not logged in.');
         }
         return true;

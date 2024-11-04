@@ -26,9 +26,7 @@ class Service extends Request{
         $this->meta = new Collector();
         $this->collector = new Collector();
         $this->relationships = new Collector();
-        if($authCheck){
-            $this->assertUserAccessToken();
-        }
+        $this->assertUserAccessToken($authCheck);
     }
 
     public function user():IUser{
@@ -39,7 +37,10 @@ class Service extends Request{
         return $this->securityManager;
     }
 
-    public function assertUserAccessToken():bool{
+    public function assertUserAccessToken(bool $authCheck=true):bool{
+        if(!$authCheck){
+            return true;
+        }
         $this->securityManager->assertUserAccess();
         return true;
     }

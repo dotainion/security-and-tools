@@ -11,8 +11,8 @@ class SecurityRepository extends Repository{
     protected SecurityFactory $factory;
 
     public function __construct(){
-        parent::__construct();
         $this->permissionOff();
+        parent::__construct();
         $this->factory = new SecurityFactory();
     }
     
