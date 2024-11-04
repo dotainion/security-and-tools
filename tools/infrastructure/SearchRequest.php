@@ -20,7 +20,7 @@ class SearchRequest extends Request{
         parent::__construct();
     }
 
-    private function uuid(string $attribute):?Id{
+    public function uuid(string $attribute):?Id{
         $id = new Id($this->get($attribute));
         if($id->hasId()){
             return $id;
@@ -32,35 +32,35 @@ class SearchRequest extends Request{
         return !empty($this->where());
     }
 
-    private function limit():?int{
+    public function limit():?int{
         return $this->get('limit');
     }
 
-    private function active():?bool{
+    public function active():?bool{
         return $this->get('active');
     }
 
-    private function inactive():?bool{
+    public function inactive():?bool{
         return $this->get('inactive');
     }
 
-    private function id():?Id{
+    public function id():?Id{
         return $this->uuid('id');
     }
 
-    private function categoryId():?Id{
+    public function categoryId():?Id{
         return $this->uuid('categoryId');
     }
 
-    private function name():?string{
+    public function name():?string{
         return $this->get('name');
     }
 
-    private function completed():?bool{
+    public function completed():?bool{
         return $this->get('completed');
     }
 
-    private function canceled():?bool{
+    public function canceled():?bool{
         return $this->get('canceled');
     }
 
