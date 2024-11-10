@@ -132,4 +132,8 @@ class Env{
     public static function database():string{
         return self::env('DB_DATABASE');
     }
+
+    public static function stripeSecret():string{
+        return self::env('STRIPE-SECRET');
+    }
 }

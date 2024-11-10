@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
-        'name' => 'rhea/ccawebsiteservice',
+        'name' => 'dotainion/security-tools',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '95eee56c1d6d0115301c924161a72929996f5d96',
+        'reference' => '01ee8a26035df20c21694342f1c9cbd407307791',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -25,6 +25,15 @@
             'reference' => 'dbafc5a4c15542bd23d6c3f82eb9cc8113433587',
             'type' => 'library',
             'install_path' => __DIR__ . '/../dotainion/query-permission',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'dotainion/security-tools' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '01ee8a26035df20c21694342f1c9cbd407307791',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -64,15 +73,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'rhea/ccawebsiteservice' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '95eee56c1d6d0115301c924161a72929996f5d96',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'rhumsaa/uuid' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -80,9 +80,9 @@
             ),
         ),
         'stripe/stripe-php' => array(
-            'pretty_version' => 'v13.8.0',
-            'version' => '13.8.0.0',
-            'reference' => '577d64a3fdc92ba2915263299a69136a2813f4a3',
+            'pretty_version' => 'v16.2.0',
+            'version' => '16.2.0.0',
+            'reference' => '813ae4961755af28a13bda451689f7a6ed6498cb',
             'type' => 'library',
             'install_path' => __DIR__ . '/../stripe/stripe-php',
             'aliases' => array(),
