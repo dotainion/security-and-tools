@@ -7,6 +7,7 @@ use Stripe\Customer;
 use Stripe\StripeClient;
 use Throwable;
 use tools\infrastructure\Env;
+use tools\infrastructure\ICustomer;
 
 class StripeCustomer
 {
@@ -16,15 +17,15 @@ class StripeCustomer
         $this->stripe = new StripeClient(Env::stripeSecret());
     }
 
-    public function createCustomerIfNotExist(Id $id, ?string $name, ?string $email, ?string $phone): Customer{
-        $customer = $this->customer($id);
+    public function createCustomerIfNotExist(?ICustomer $user): Customer{
+        $customer = ($user !== null) ? $this->customer($user->id()) : null;        
         if (!$customer) {
             try {
                 $customer = $this->stripe->customers->create([
-                    'id' => $id->toString(),
-                    'name' => $name,
-                    'email' => $email,
-                    'phone' => $phone
+                    'id' => $user->id()->toString(),
+                    'name' => $user->name(),
+                    'email' => $user->email(),
+                    'phone' => $user->phone()
                 ]);
             } catch (Throwable $ex) {
                 throw new InvalidArgumentException('Failed to create Stripe customer: ' . $ex->getMessage());
