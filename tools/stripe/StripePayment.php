@@ -18,18 +18,21 @@ class StripePayment
         $this->stripe = new StripeClient(Env::stripeSecret());
     }
 
-    public function createPaymentIntent(Customer $customer, float $amount, ?string $onBehalfOf = null): PaymentIntent
+    public function createPaymentIntent(?Customer $customer, string $currency, float $amount, ?string $onBehalfOf = null): PaymentIntent
     {
         try {
             $options = [];
 
+            if ($customer !== null) {
+                $options['customer'] = $customer->id;
+            }
             if ($onBehalfOf !== null) {
                 $options['on_behalf_of'] = $onBehalfOf;
             }
 
             return $this->stripe->paymentIntents->create([
                 'amount' => $amount * 100,
-                'currency' => 'usd',
+                'currency' => $currency,
                 'automatic_payment_methods' => [
                     'enabled' => true
                 ],
