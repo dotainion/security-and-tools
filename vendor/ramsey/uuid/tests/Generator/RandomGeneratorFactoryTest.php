@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Generator;
 
-use Ramsey\Uuid\Test\TestCase;
+use Ramsey\Uuid\Generator\RandomBytesGenerator;
 use Ramsey\Uuid\Generator\RandomGeneratorFactory;
+use Ramsey\Uuid\Test\TestCase;
 
 class RandomGeneratorFactoryTest extends TestCase
 {
-    public function testFactoryReturnsRandomBytesGenerator()
+    public function testFactoryReturnsRandomBytesGenerator(): void
     {
-        $generator = RandomGeneratorFactory::getGenerator();
+        $generator = (new RandomGeneratorFactory())->getGenerator();
 
-        $this->assertInstanceOf('Ramsey\\Uuid\\Generator\\RandomBytesGenerator', $generator);
+        $this->assertInstanceOf(RandomBytesGenerator::class, $generator);
     }
 }

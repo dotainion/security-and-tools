@@ -1,66 +1,29 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test;
 
-use AspectMock\Test as AspectMock;
 use Mockery;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase as YoastTestCase;
+use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 
-class TestCase extends YoastTestCase
+use function current;
+use function pack;
+use function unpack;
+
+class TestCase extends PhpUnitTestCase
 {
-    protected function tear_down() // phpcs:ignore
+    protected function tearDown(): void
     {
-        parent::tear_down();
-
-        if (PHP_MAJOR_VERSION < 8) {
-            AspectMock::clean();
-        }
-
+        parent::tearDown();
         Mockery::close();
     }
 
-    protected function skip64BitTest()
+    public static function isLittleEndianSystem(): bool
     {
-        if (PHP_INT_SIZE == 4) {
-            $this->markTestSkipped(
-                'Skipping test that can run only on a 64-bit build of PHP.'
-            );
-        }
-    }
+        /** @var array $unpacked */
+        $unpacked = unpack('v', pack('S', 0x00FF));
 
-    protected function skipIfNoMoontoastMath()
-    {
-        if (!$this->hasMoontoastMath()) {
-            $this->markTestSkipped(
-                'Skipping test that requires moontoast/math.'
-            );
-        }
-    }
-
-    protected function hasMoontoastMath()
-    {
-        return class_exists('Moontoast\\Math\\BigNumber');
-    }
-
-    protected function skipIfLittleEndianHost()
-    {
-        if (self::isLittleEndianSystem()) {
-            $this->markTestSkipped(
-                'Skipping test targeting big-endian architectures.'
-            );
-        }
-    }
-
-    protected function skipIfBigEndianHost()
-    {
-        if (!self::isLittleEndianSystem()) {
-            $this->markTestSkipped(
-                'Skipping test targeting little-endian architectures.'
-            );
-        }
-    }
-
-    public static function isLittleEndianSystem()
-    {
-        return current(unpack('v', pack('S', 0x00FF))) === 0x00FF;
+        return current($unpacked) === 0x00FF;
     }
 }

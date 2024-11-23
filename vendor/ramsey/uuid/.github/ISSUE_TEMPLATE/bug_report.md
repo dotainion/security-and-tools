@@ -1,55 +1,35 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Bug Report
+about: Create a bug report to help us improve
 labels: bug
 assignees:
 ---
+<!--- Provide a general summary of the issue you're having in the title above. -->
 
-## Describe the bug
+## Description
+<!-- Provide a short and clear description of the bug. -->
 
-A clear and concise description of what the bug is.
-
-## To Reproduce...
-
-Steps to reproduce the behavior (include code examples, if applicable):
-
-1. Create script `foo.php` and add the following:
-
-    ``` php
-    <?php
-    require_once 'vendor/autoload.php';
-
-    $foo = new Foo\Bar();
-
-    // Code that, when run, shows the behavior...
-    ```
-
-2. Execute the script from a terminal:
-
-    ``` bash
-    $ php foo.php
-    ```
-
-3. See output similar to the following:
-
-    ```
-    Error message or wrong output...
-    ```
+## Steps to reproduce
+<!--
+Provide steps to reproduce the behavior you are experiencing. Please try to keep
+this as short as possible. If able, create a reproducible script outside of any
+framework you are using. This will help us to quickly debug the issue.
+-->
+1. Step one...
+2. Step two...
+3. Step three...
 
 ## Expected behavior
-
-A clear and concise description of what you expected to happen.
+<!-- Provide a short and clear description of what you expect to happen. -->
 
 ## Screenshots or output
-
-If applicable, add screenshots or program output to help explain your problem.
+<!-- If applicable, add screenshots or program output to help explain your problem. -->
 
 ## Environment details
-
- - OS: [e.g. Windows 10, Linux (Ubuntu 18.04.1), macOS Mojave (10.14.2)]
- - PHP version: [e.g. 7.1.25, 7.2.13]
- - ramsey/uuid version: [e.g. 1.0.0, 1.0.1, 1.1.0]
+<!-- Provide details about the system where you're using this package. -->
+- version of this package: *e.g. 1.0.0, 1.0.1, 1.1.0*
+- PHP version: *e.g. 7.3.16, 7.4.4*
+- OS: *e.g. Windows 10, Linux (Ubuntu 18.04.1), macOS Catalina (10.15.3)*
 
 ## Additional context
-
-Add any other context about the problem here.
+<!-- Provide any additional context that may help us debug the problem. -->

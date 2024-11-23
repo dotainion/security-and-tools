@@ -1,33 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Provider\Time;
 
 use Ramsey\Uuid\Provider\Time\SystemTimeProvider;
 use Ramsey\Uuid\Test\TestCase;
-use AspectMock\Test as AspectMock;
+use Ramsey\Uuid\Type\Time;
 
 class SystemTimeProviderTest extends TestCase
 {
-
-    public function testCurrentTimeReturnsTimestampArray()
+    public function testGetTimeUses(): void
     {
         $provider = new SystemTimeProvider();
-        $time = $provider->currentTime();
-        $this->assertArrayHasKey('sec', $time);
-        $this->assertArrayHasKey('usec', $time);
-    }
+        $time = $provider->getTime();
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     * @requires PHP < 8
-     */
-    public function testCurrentTimeUsesGettimeofday()
-    {
-        $timestamp = ['sec' => 1458844556, 'usec' => 200997];
-        $func = AspectMock::func('Ramsey\Uuid\Provider\Time', 'gettimeofday', $timestamp);
-        $provider = new SystemTimeProvider();
-        $provider->currentTime();
-        $func->verifyInvokedOnce();
+        $this->assertInstanceOf(Time::class, $time);
     }
 }

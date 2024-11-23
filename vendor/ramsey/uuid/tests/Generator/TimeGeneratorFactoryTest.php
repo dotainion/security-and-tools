@@ -1,25 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Generator;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use Ramsey\Uuid\Converter\TimeConverterInterface;
 use Ramsey\Uuid\Generator\TimeGeneratorFactory;
+use Ramsey\Uuid\Generator\TimeGeneratorInterface;
+use Ramsey\Uuid\Provider\NodeProviderInterface;
+use Ramsey\Uuid\Provider\TimeProviderInterface;
 use Ramsey\Uuid\Test\TestCase;
 
-/**
- * Class TimeGeneratorFactoryTest
- * @package Ramsey\Uuid\Test\Generator
- * @covers Ramsey\Uuid\Generator\TimeGeneratorFactory
- */
 class TimeGeneratorFactoryTest extends TestCase
 {
-    public function testGeneratorReturnsNewGenerator()
+    public function testGeneratorReturnsNewGenerator(): void
     {
-        $timeProvider = $this->getMockBuilder('Ramsey\Uuid\Provider\TimeProviderInterface')->getMock();
-        $nodeProvider = $this->getMockBuilder('Ramsey\Uuid\Provider\NodeProviderInterface')->getMock();
-        $timeConverter = $this->getMockBuilder('Ramsey\Uuid\Converter\TimeConverterInterface')->getMock();
+        /** @var MockObject & TimeProviderInterface $timeProvider */
+        $timeProvider = $this->getMockBuilder(TimeProviderInterface::class)->getMock();
+
+        /** @var MockObject & NodeProviderInterface $nodeProvider */
+        $nodeProvider = $this->getMockBuilder(NodeProviderInterface::class)->getMock();
+
+        /** @var MockObject & TimeConverterInterface $timeConverter */
+        $timeConverter = $this->getMockBuilder(TimeConverterInterface::class)->getMock();
 
         $factory = new TimeGeneratorFactory($nodeProvider, $timeConverter, $timeProvider);
         $generator = $factory->getGenerator();
-        $this->assertInstanceOf('Ramsey\Uuid\Generator\TimeGeneratorInterface', $generator);
+
+        $this->assertInstanceOf(TimeGeneratorInterface::class, $generator);
     }
 }

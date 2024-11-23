@@ -1,48 +1,29 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Generator;
 
 use Ramsey\Uuid\Generator\PeclUuidTimeGenerator;
-use AspectMock\Test as AspectMock;
+use Ramsey\Uuid\Rfc4122\Fields;
+use Ramsey\Uuid\Test\TestCase;
+use Ramsey\Uuid\Uuid;
 
-/**
- * Class PeclUuidTimeGeneratorTest
- * @package Ramsey\Uuid\Test\Generator
- * @covers Ramsey\Uuid\Generator\PeclUuidTimeGenerator
- */
-class PeclUuidTimeGeneratorTest extends PeclUuidTestCase
+class PeclUuidTimeGeneratorTest extends TestCase
 {
-
     /**
-     * This test is just to check collaboration with the PECL UUID extension - not to check
-     * the correctness of the methods defined in that extension.
-     * So we are just checking that the UUID methods are called with the right parameters.
-     *
-     * @requires PHP < 8
+     * @requires extension uuid
      */
-    public function testGenerateCreatesUuidUsingPeclUuidMethods()
+    public function testGenerateCreatesUuidUsingPeclUuidMethods(): void
     {
-        $create = AspectMock::func('Ramsey\Uuid\Generator', 'uuid_create', $this->uuidString);
-        $parse = AspectMock::func('Ramsey\Uuid\Generator', 'uuid_parse', $this->uuidBinary);
+        $generator = new PeclUuidTimeGenerator();
+        $bytes = $generator->generate();
+        $uuid = Uuid::fromBytes($bytes);
 
-        $generator = new PeclUuidTimeGenerator;
-        $generator->generate();
+        /** @var Fields $fields */
+        $fields = $uuid->getFields();
 
-        $create->verifyInvoked([UUID_TYPE_TIME]);
-        $parse->verifyInvoked([$this->uuidString]);
-    }
-
-    /**
-     * This test is for the return type of the generate method
-     * It ensures that the generate method returns whatever value uuid_parse returns.
-     *
-     * @requires PHP < 8
-     */
-    public function testGenerateReturnsUuidString()
-    {
-        AspectMock::func('Ramsey\Uuid\Generator', 'uuid_create', $this->uuidString);
-        AspectMock::func('Ramsey\Uuid\Generator', 'uuid_parse', $this->uuidBinary);
-        $generator = new PeclUuidTimeGenerator;
-        $uuid = $generator->generate();
-        $this->assertEquals($this->uuidBinary, $uuid);
+        $this->assertSame(16, strlen($bytes));
+        $this->assertSame(Uuid::UUID_TYPE_TIME, $fields->getVersion());
     }
 }

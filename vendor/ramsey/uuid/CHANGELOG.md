@@ -6,6 +6,842 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## 4.7.6 - 2024-04-27
+
+### Fixed
+
+* Allow brick/math version `^0.12`.
+
+
+## 4.7.5 - 2023-11-08
+
+### Fixed
+
+* Protect against UUIDv7 collisions within the same millisecond, as reported
+  in [#518](https://github.com/ramsey/uuid/issues/518) and fixed in
+  [#522](https://github.com/ramsey/uuid/pull/522).
+* Improve the return type hint for `UuidInterface::compareTo()`.
+
+
+## 4.7.4 - 2023-04-15
+
+### Fixed
+
+* Allow brick/math version `^0.11`.
+* Add explicit `Stringable` interface to `UuidInterface`.
+* Fix namespace conflict reported in [#490](https://github.com/ramsey/uuid/issues/490).
+* Fix unserialize error with `OrderedTimeCodec` reported in
+  [#494](https://github.com/ramsey/uuid/issues/494).
+
+
+## 4.7.3 - 2023-01-12
+
+### Fixed
+
+* The original 4.7.2 tag accidentally pointed to a commit in the 5.x branch. I
+  have replaced the 4.7.2 tag with a new tag that points to the correct commit,
+  but I am creating this tag to help notify users and automated processes who
+  might have already updated to the bad 4.7.2 tag.
+
+
+## 4.7.2 - 2023-01-12
+
+### Fixed
+
+* Amend Psalm assertion syntax on `Uuid::isValid()` to prevent incorrect type
+  inference ([#486](https://github.com/ramsey/uuid/pull/486)).
+* Re-tagged with the correct commit hash, since the first tag was pointing to
+  a commit in the 5.x branch.
+
+
+## 4.7.1 - 2022-12-31
+
+### Fixed
+
+* Allow the use of ramsey/collection ^2.0 with ramsey/uuid.
+
+
+## 4.7.0 - 2022-12-19
+
+### Added
+
+* Add `Uuid::fromHexadecimal()` and `UuidFactory::fromHexadecimal()`. These
+  methods are not required by the interfaces.
+
+### Fixed
+
+* Ignore MAC addresses consisting of all zeroes (i.e., `00:00:00:00:00:00`).
+
+
+## 4.6.0 - 2022-11-05
+
+### Added
+
+* Add support for version 8, Unix Epoch time UUIDs, as defined in
+  [draft-ietf-uuidrev-rfc4122bis-00, section 5.8][version8]. While still an
+  Internet-Draft, version 8 is stable and unlikely to change in any way that
+  breaks compatibility.
+  * Use `Ramsey\Uuid\Uuid::uuid8()` to generate version 8 UUIDs.
+  * Version 8 UUIDs are of type `Ramsey\Uuid\Rfc4122\UuidV8`.
+  * The constant `Ramsey\Uuid\Uuid::UUID_TYPE_CUSTOM` exists for version 8 UUIDs.
+
+### Fixed
+
+* Ensure monotonicity of version 7 UUIDs.
+
+
+## 4.5.1 - 2022-09-16
+
+### Fixed
+
+* Update RFC 4122 validator to recognize version 6 and 7 UUIDs.
+
+
+## 4.5.0 - 2022-09-15
+
+### Added
+
+* Promote version 6, reordered time UUIDs from the `Nonstandard` namespace to
+  the `Rfc4122` namespace. Version 6 UUIDs are defined in
+  [draft-ietf-uuidrev-rfc4122bis-00, section 5.6][version6]. While still an
+  Internet-Draft version 6 is stable and unlikely to change in any way that
+  breaks compatibility.
+* Add support for version 7, Unix Epoch time UUIDs, as defined in
+  [draft-ietf-uuidrev-rfc4122bis-00, section 5.7][version7]. While still an
+  Internet-Draft, version 7 is stable and unlikely to change in any way that
+  breaks compatibility.
+  * Use `Ramsey\Uuid\Uuid::uuid7()` to generate version 7 UUIDs.
+  * Version 7 UUIDs are of type `Ramsey\Uuid\Rfc4122\UuidV7`.
+  * The constant `Ramsey\Uuid\Uuid::UUID_TYPE_UNIX_TIME` exists for version
+    7 UUIDs.
+* Add `Ramsey\Uuid\Converter\Time\UnixTimeConverter` and
+  `Ramsey\Uuid\Generator\UnixTimeGenerator` to support version 7 UUID generation.
+* Add support for [max UUIDs][] through `Ramsey\Uuid\Uuid::MAX` and
+  `Ramsey\Uuid\Rfc4122\MaxUuid`.
+
+### Changed
+
+* The lowest version of brick/math allowed is now `^0.8.8`.
+
+### Deprecated
+
+The following will be removed in ramsey/uuid 5.0.0:
+
+* `Ramsey\Uuid\Nonstandard\UuidV6` is deprecated in favor of
+  `Ramsey\Uuid\Rfc4122\UuidV6`.
+* `Ramsey\Uuid\Uuid::UUID_TYPE_PEABODY`; use
+  `Ramsey\Uuid\Uuid::UUID_TYPE_REORDERED_TIME` instead.
+
+### Fixed
+
+* For `Ramsey\Uuid\Uuid::isValid()`, Psalm now asserts the UUID is a
+  non-empty-string when it is valid.
+* Nil UUIDs are properly treated as RFC 4122 variants, and `getVariant()` now
+  returns a `2` when called on a nil UUID.
+
+
+## 4.4.0 - 2022-08-05
+
+### Changed
+
+* Allow brick/math 0.10.
+* Remove dev dependency to moontoast/math.
+* Un-deprecate `UuidInterface::getUrn()`.
+
+
+## 4.3.1 - 2022-03-27
+
+### Deprecated
+
+The following will be removed in ramsey/uuid 5.0.0:
+
+* `Ramsey\Uuid\Generator\RandomLibAdapter`
+
+
+## 4.3.0 - 2022-03-26
+
+### Changed
+
+* Remove support for PHP 7.2, 7.3, and 7.4. This is not a BC break, since
+  Composer will do the right thing for your environment and select a compatible
+  version of this library.
+* Require `ext-ctype` extension. For applications that run in environments where
+  the `ext-ctype` is not present, please require a polyfill, such as
+  [symfony/polyfill-ctype](https://packagist.org/packages/symfony/polyfill-ctype).
+* Use `iterable<UuidBuilderInterface>` instead of `BuilderCollection` types.
+* Use `iterable<NodeProviderInterface>` instead of `NodeProviderCollection` types.
+
+### Deprecated
+
+The following will be removed in ramsey/uuid 5.0.0:
+
+* `Ramsey\Uuid\Builder\BuilderCollection`
+* `Ramsey\Uuid\Provider\Node\NodeProviderCollection`
+* Dependency on ramsey/collection
+
+### Fixed
+
+* Support valid UUIDs in uppercase in `LazyUuidFromString`.
+
+
+## 4.2.3 - 2021-09-25
+
+### Fixed
+
+* Switch back to `^8.0` in the PHP version requirement.
+
+
+## 4.2.2 - 2021-09-24
+
+### Fixed
+
+* Indicate support for PHP 8.1, using `~8.1.0` to prevent installations on 8.2
+  until the library is ready.
+
+
+## 4.2.1 - 2021-08-10
+
+### Fixed
+
+* Fix *soft* BC break with `Uuid::fromString()` signature. The change from
+  `string` to `non-empty-string` on the parameter annotation introduced a
+  BC break for those using static analysis tools. This release reverts this
+  change and provides an assertion to guard against empty strings.
+  See [ramsey/uuid#383](https://github.com/ramsey/uuid/pull/383).
+
+
+## 4.2.0 - 2021-08-06
+
+### Added
+
+* Add `Ramsey\Uuid\Exception\UuidExceptionInterface` for all ramsey/uuid
+  exceptions to implement. See [ramsey/uuid#340](https://github.com/ramsey/uuid/pull/340).
+
+### Fixed
+
+* Fix serialization of UUIDs.
+  See [ramsey/uuid#361](https://github.com/ramsey/uuid/pull/361).
+
+
+## 4.1.3 - 2021-09-25
+
+### Fixed
+
+* Switch back to `^8.0` in the PHP version requirement.
+
+
+## 4.1.2 - 2021-09-24
+
+### Fixed
+
+* Lock 4.1.x to `~8.0.0` to indicate it does not support PHP 8.1.
+
+
+## 4.1.1 - 2020-08-18
+
+### Fixed
+
+* Allow use of brick/math version 0.9
+
+
+## 4.1.0 - 2020-07-28
+
+### Changed
+
+* Improve performance of `Uuid::fromString()`, `Uuid::fromBytes()`,
+  `UuidInterface#toString()`, and `UuidInterface#getBytes()`. See PR
+  [#324](https://github.com/ramsey/uuid/pull/324) for more information.
+
+
+## 4.0.3 - 2021-09-25
+
+### Fixed
+
+* Switch back to `^8.0` in the PHP version requirement.
+
+
+## 4.0.2 - 2021-09-24
+
+### Fixed
+
+* Lock 4.0.x to `~8.0.0` to indicate it does not support PHP 8.1.
+
+
+## 4.0.1 - 2020-03-29
+
+### Fixed
+
+* Fix collection deserialization errors due to upstream `allowed_classes` being
+  set to `false`. For details, see [ramsey/uuid#303](https://github.com/ramsey/uuid/issues/303)
+  and [ramsey/collection#47](https://github.com/ramsey/collection/issues/47).
+
+
+## 4.0.0 - 2020-03-22
+
+### Added
+
+* Add support for version 6 UUIDs, as defined by <http://gh.peabody.io/uuidv6/>,
+  including the static method `Uuid::uuid6()`, which returns a
+  `Nonstandard\UuidV6` instance.
+* Add ability to generate version 2 (DCE Security) UUIDs, including the static
+  method `Uuid::uuid2()`, which returns an `Rfc4122\UuidV2` instance.
+* Add classes to represent each version of RFC 4122 UUID. When generating new
+  UUIDs or creating UUIDs from existing strings, bytes, or integers, if the UUID
+  is an RFC 4122 variant, one of these instances will be returned:
+  * `Rfc4122\UuidV1`
+  * `Rfc4122\UuidV2`
+  * `Rfc4122\UuidV3`
+  * `Rfc4122\UuidV4`
+  * `Rfc4122\UuidV5`
+  * `Rfc4122\NilUuid`
+* Add classes to represent version 6 UUIDs, GUIDs, and nonstandard
+  (non-RFC 4122 variant) UUIDs:
+  * `Nonstandard\UuidV6`
+  * `Guid\Guid`
+  * `Nonstandard\Uuid`
+* Add `Uuid::fromDateTime()` to create version 1 UUIDs from instances of
+  `\DateTimeInterface`.
+* The `\DateTimeInterface` instance returned by `UuidInterface::getDateTime()`
+  (and now `Rfc4122\UuidV1::getDateTime()`) now includes microseconds, as
+  specified by the version 1 UUID.
+* Add `Validator\ValidatorInterface` and `Validator\GenericValidator` to allow
+  flexibility in validating UUIDs/GUIDs.
+  * The default validator continues to validate UUID strings using the same
+    relaxed validation pattern found in the 3.x series of ramsey/uuid.
+  * Introduce `Rfc4122\Validator` that may be used for strict validation of
+    RFC 4122 UUID strings.
+  * Add ability to change the default validator used by `Uuid` through
+    `FeatureSet::setValidator()`.
+  * Add `getValidator()` and `setValidator()` to `UuidFactory`.
+* Add `Provider\Node\StaticNodeProvider` to assist in setting a custom static
+  node value with the multicast bit set for version 1 UUIDs.
+* Add the following new exceptions:
+  * `Exception\BuilderNotFoundException` -
+    Thrown to indicate that no suitable UUID builder could be found.
+  * `Exception\DateTimeException` -
+    Thrown to indicate that the PHP DateTime extension encountered an
+    exception/error.
+  * `Exception\DceSecurityException` -
+    Thrown to indicate an exception occurred while dealing with DCE Security
+    (version 2) UUIDs.
+  * `Exception\InvalidArgumentException` -
+    Thrown to indicate that the argument received is not valid. This extends the
+    built-in PHP `\InvalidArgumentException`, so there should be no BC breaks
+    with ramsey/uuid throwing this exception, if you are catching the PHP
+    exception.
+  * `Exception\InvalidBytesException` -
+    Thrown to indicate that the bytes being operated on are invalid in some way.
+  * `Exception\NameException` -
+    Thrown to indicate that an error occurred while attempting to hash a
+    namespace and name.
+  * `Exception\NodeException` -
+    Throw to indicate that attempting to fetch or create a node ID encountered
+    an error.
+  * `Exception\RandomSourceException` -
+    Thrown to indicate that the source of random data encountered an error.
+  * `Exception\TimeSourceException` -
+    Thrown to indicate that the source of time encountered an error.
+  * `Exception\UnableToBuildUuidException` -
+    Thrown to indicate a builder is unable to build a UUID.
+* Introduce a `Builder\FallbackBuilder`, used by `FeatureSet` to help decide
+  whether to return a `Uuid` or `Nonstandard\Uuid` when decoding a
+  UUID string or bytes.
+* Add `Rfc4122\UuidInterface` to specifically represent RFC 4122 variant UUIDs.
+* Add `Rfc4122\UuidBuilder` to build RFC 4122 variant UUIDs. This replaces the
+  existing `Builder\DefaultUuidBuilder`, which is now deprecated.
+* Introduce `Math\CalculatorInterface` for representing calculators to perform
+  arithmetic operations on integers.
+* Depend on [brick/math](https://github.com/brick/math) for the
+  `Math\BrickMathCalculator`, which is the default calculator used by this
+  library when math cannot be performed in native PHP due to integer size
+  limitations. The calculator is configurable and may be changed, if desired.
+* Add `Converter\Number\GenericNumberConverter` and
+  `Converter\Time\GenericTimeConverter` which will use the calculator provided
+  to convert numbers and time to values for UUIDs.
+* Introduce `Type\Hexadecimal`, `Type\Integer`, `Type\Decimal`, and `Type\Time`
+  for improved type-safety when dealing with arbitrary string values.
+* Add a `Type\TypeInterface` that each of the ramsey/uuid types implements.
+* Add `Fields\FieldsInterface` and `Rfc4122\FieldsInterface` to define
+  field layouts for UUID variants. The implementations `Rfc4122\Fields`,
+  `Guid\Fields`, and `Nonstandard\Fields` store the 16-byte,
+  binary string representation of the UUID internally, and these manage
+  conversion of the binary string into the hexadecimal field values.
+* Introduce `Builder\BuilderCollection` and `Provider\Node\NodeProviderCollection`.
+  These are typed collections for providing builders and node providers to
+  `Builder\FallbackBuilder` and `Provider\Node\FallbackNodeProvider`, respectively.
+* Add `Generator\NameGeneratorInterface` to support alternate methods of
+  generating bytes for version 3 and version 5 name-based UUID. By default,
+  ramsey/uuid uses the `Generator\DefaultNameGenerator`, which uses the standard
+  algorithm this library has used since the beginning. You may choose to use the
+  new `Generator\PeclUuidNameGenerator` to make use of the new
+  `uuid_generate_md5()` and `uuid_generate_sha1()` functions in
+  [ext-uuid version 1.1.0](https://pecl.php.net/package/uuid).
+
+### Changed
+
+* Set minimum required PHP version to 7.2.
+* This library now works on 32-bit and 64-bit systems, with no degradation in
+  functionality.
+* By default, the following static methods will now return specific instance
+  types. This should not cause any BC breaks if typehints target `UuidInterface`:
+  * `Uuid::uuid1` returns `Rfc4122\UuidV1`
+  * `Uuid::uuid3` returns `Rfc4122\UuidV3`
+  * `Uuid::uuid4` returns `Rfc4122\UuidV4`
+  * `Uuid::uuid5` returns `Rfc4122\UuidV5`
+* Accept `Type\Hexadecimal` for the `$node` parameter for
+  `UuidFactoryInterface::uuid1()`. This is in addition to the `int|string` types
+  already accepted, so there are no BC breaks. `Type\Hexadecimal` is now the
+  recommended type to pass for `$node`.
+* Out of the box, `Uuid::fromString()`, `Uuid::fromBytes()`, and
+  `Uuid::fromInteger()` will now return either an `Rfc4122\UuidInterface`
+  instance or an instance of `Nonstandard\Uuid`, depending on whether the input
+  contains an RFC 4122 variant UUID with a valid version identifier. Both
+  implement `UuidInterface`, so BC breaks should not occur if typehints use the
+  interface.
+* Change `Uuid::getFields()` to return an instance of `Fields\FieldsInterface`.
+  Previously, it returned an array of integer values (on 64-bit systems only).
+* `Uuid::getDateTime()` now returns an instance of `\DateTimeImmutable` instead
+  of `\DateTime`.
+* Make the following changes to `UuidInterface`:
+  * `getHex()` now returns a `Type\Hexadecimal` instance.
+  * `getInteger()` now returns a `Type\Integer` instance. The `Type\Integer`
+    instance holds a string representation of a 128-bit integer. You may then
+    use a math library of your choice (bcmath, gmp, etc.) to operate on the
+    string integer.
+  * `getDateTime()` now returns `\DateTimeInterface` instead of `\DateTime`.
+  * Add `__toString()` method.
+  * Add `getFields()` method. It returns an instance of `Fields\FieldsInterface`.
+* Add the following new methods to `UuidFactoryInterface`:
+  * `uuid2()`
+  * `uuid6()`
+  * `fromDateTime()`
+  * `fromInteger()`
+  * `getValidator()`
+* This library no longer throws generic exceptions. However, this should not
+  result in BC breaks, since the new exceptions extend from built-in PHP
+  exceptions that this library previously threw.
+  * `Exception\UnsupportedOperationException` is now descended from
+    `\LogicException`. Previously, it descended from `\RuntimeException`.
+* Change required constructor parameters for `Uuid`:
+  * Change the first required constructor parameter for `Uuid` from
+    `array $fields` to `Rfc4122\FieldsInterface $fields`.
+  * Add `Converter\TimeConverterInterface $timeConverter` as the fourth
+    required constructor parameter for `Uuid`.
+* Change the second required parameter of `Builder\UuidBuilderInterface::build()`
+  from `array $fields` to `string $bytes`. Rather than accepting an array of
+  hexadecimal strings as UUID fields, the `build()` method now expects a byte
+  string.
+* Add `Converter\TimeConverterInterface $timeConverter` as the second required
+  constructor parameter for `Rfc4122\UuidBuilder`. This also affects the
+  now-deprecated `Builder\DefaultUuidBuilder`, since this class now inherits
+  from `Rfc4122\UuidBuilder`.
+* Add `convertTime()` method to `Converter\TimeConverterInterface`.
+* Add `getTime()` method to `Provider\TimeProviderInterface`. It replaces the
+  `currentTime()` method.
+* `Provider\Node\FallbackNodeProvider` now accepts only a
+  `Provider\Node\NodeProviderCollection` as its constructor parameter.
+* `Provider\Time\FixedTimeProvider` no longer accepts an array but accepts only
+  `Type\Time` instances.
+* `Provider\NodeProviderInterface::getNode()` now returns `Type\Hexadecimal`
+  instead of `string|false|null`.
+* `Converter/TimeConverterInterface::calculateTime()` now returns
+  `Type\Hexadecimal` instead of `array`. The value is the full UUID timestamp
+  value (count of 100-nanosecond intervals since the Gregorian calendar epoch)
+  in hexadecimal format.
+* Change methods in `NumberConverterInterface` to accept and return string values
+  instead of `mixed`; this simplifies the interface and makes it consistent.
+* `Generator\DefaultTimeGenerator` no longer adds the variant and version bits
+  to the bytes it returns. These must be applied to the bytes afterwards.
+* When encoding to bytes or decoding from bytes, `OrderedTimeCodec` now checks
+  whether the UUID is an RFC 4122 variant, version 1 UUID. If not, it will throw
+  an exception—`InvalidArgumentException` when using
+  `OrderedTimeCodec::encodeBinary()` and `UnsupportedOperationException` when
+  using `OrderedTimeCodec::decodeBytes()`.
+
+### Deprecated
+
+The following functionality is deprecated and will be removed in ramsey/uuid
+5.0.0.
+
+* The following methods from `UuidInterface` and `Uuid` are deprecated. Use their
+  counterparts on the `Rfc4122\FieldsInterface` returned by `Uuid::getFields()`.
+  * `getClockSeqHiAndReservedHex()`
+  * `getClockSeqLowHex()`
+  * `getClockSequenceHex()`
+  * `getFieldsHex()`
+  * `getNodeHex()`
+  * `getTimeHiAndVersionHex()`
+  * `getTimeLowHex()`
+  * `getTimeMidHex()`
+  * `getTimestampHex()`
+  * `getVariant()`
+  * `getVersion()`
+* The following methods from `Uuid` are deprecated. Use the `Rfc4122\FieldsInterface`
+  instance returned by `Uuid::getFields()` to get the `Type\Hexadecimal` value
+  for these fields. You may use the new `Math\CalculatorInterface::toIntegerValue()`
+  method to convert the `Type\Hexadecimal` instances to instances of
+  `Type\Integer`. This library provides `Math\BrickMathCalculator`, which may be
+  used for this purpose, or you may use the arbitrary-precision arithmetic
+  library of your choice.
+  * `getClockSeqHiAndReserved()`
+  * `getClockSeqLow()`
+  * `getClockSequence()`
+  * `getNode()`
+  * `getTimeHiAndVersion()`
+  * `getTimeLow()`
+  * `getTimeMid()`
+  * `getTimestamp()`
+* `getDateTime()` on `UuidInterface` and `Uuid` is deprecated. Use this method
+  only on instances of `Rfc4122\UuidV1` or `Nonstandard\UuidV6`.
+* `getUrn()` on `UuidInterface` and `Uuid` is deprecated. It is available on
+  `Rfc4122\UuidInterface` and classes that implement it.
+* The following methods are deprecated and have no direct replacements. However,
+  you may obtain the same information by calling `UuidInterface::getHex()` and
+  splitting the return value in half.
+  * `UuidInterface::getLeastSignificantBitsHex()`
+  * `UuidInterface::getMostSignificantBitsHex()`
+  * `Uuid::getLeastSignificantBitsHex()`
+  * `Uuid::getMostSignificantBitsHex()`
+  * `Uuid::getLeastSignificantBits()`
+  * `Uuid::getMostSignificantBits()`
+* `UuidInterface::getNumberConverter()` and `Uuid::getNumberConverter()` are
+  deprecated. There is no alternative recommendation, so plan accordingly.
+* `Builder\DefaultUuidBuilder` is deprecated; transition to `Rfc4122\UuidBuilder`.
+* `Converter\Number\BigNumberConverter` is deprecated; transition to
+  `Converter\Number\GenericNumberConverter`.
+* `Converter\Time\BigNumberTimeConverter` is deprecated; transition to
+  `Converter\Time\GenericTimeConverter`.
+* The classes for representing and generating *degraded* UUIDs are deprecated.
+  These are no longer necessary; this library now behaves the same on 32-bit and
+  64-bit systems.
+  * `Builder\DegradedUuidBuilder`
+  * `Converter\Number\DegradedNumberConverter`
+  * `Converter\Time\DegradedTimeConverter`
+  * `DegradedUuid`
+* The `Uuid::UUID_TYPE_IDENTIFIER` constant is deprecated. Use
+  `Uuid::UUID_TYPE_DCE_SECURITY` instead.
+* The `Uuid::VALID_PATTERN` constant is deprecated. Use
+  `Validator\GenericValidator::getPattern()` or `Rfc4122\Validator::getPattern()`
+  instead.
+
+### Removed
+
+* Remove the following bytes generators and recommend
+  `Generator\RandomBytesGenerator` as a suitable replacement:
+  * `Generator\MtRandGenerator`
+  * `Generator\OpenSslGenerator`
+  * `Generator\SodiumRandomGenerator`
+* Remove `Exception\UnsatisfiedDependencyException`. This library no longer
+  throws this exception.
+* Remove the method `Provider\TimeProviderInterface::currentTime()`. Use
+  `Provider\TimeProviderInterface::getTime()` instead.
+
+
+## 4.0.0-beta2 - 2020-03-01
+
+## Added
+
+* Add missing convenience methods for `Rfc4122\UuidV2`.
+* Add `Provider\Node\StaticNodeProvider` to assist in setting a custom static
+  node value with the multicast bit set for version 1 UUIDs.
+
+## Changed
+
+* `Provider\NodeProviderInterface::getNode()` now returns `Type\Hexadecimal`
+  instead of `string|false|null`.
+
+
+## 4.0.0-beta1 - 2020-02-27
+
+### Added
+
+* Add `ValidatorInterface::getPattern()` to return the regular expression
+  pattern used by the validator.
+* Add `v6()` helper function for version 6 UUIDs.
+
+### Changed
+
+* Set the pattern constants on validators as `private`. Use the `getPattern()`
+  method instead.
+* Change the `$node` parameter for `UuidFactoryInterface::uuid6()` to accept
+  `null` or `Type\Hexadecimal`.
+* Accept `Type\Hexadecimal` for the `$node` parameter for
+  `UuidFactoryInterface::uuid1()`. This is in addition to the `int|string` types
+  already accepted, so there are no BC breaks. `Type\Hexadecimal` is now the
+  recommended type to pass for `$node`.
+
+### Removed
+
+* Remove `currentTime()` method from `Provider\Time\FixedTimeProvider` and
+  `Provider\Time\SystemTimeProvider`; it had previously been removed from
+  `Provider\TimeProviderInterface`.
+
+
+## 4.0.0-alpha5 - 2020-02-23
+
+### Added
+
+* Introduce `Builder\BuilderCollection` and `Provider\Node\NodeProviderCollection`.
+
+### Changed
+
+* `Builder\FallbackBuilder` now accepts only a `Builder\BuilderCollection` as
+  its constructor parameter.
+* `Provider\Node\FallbackNodeProvider` now accepts only a `Provider\Node\NodeProviderCollection`
+  as its constructor parameter.
+* `Provider\Time\FixedTimeProvider` no longer accepts an array but accepts only
+  `Type\Time` instances.
+
+
+## 4.0.0-alpha4 - 2020-02-23
+
+### Added
+
+* Add a `Type\TypeInterface` that each of the ramsey/uuid types implements.
+* Support version 6 UUIDs; see <http://gh.peabody.io/uuidv6/>.
+
+### Changed
+
+* Rename `Type\IntegerValue` to `Type\Integer`. It was originally named
+  `IntegerValue` because static analysis sees `Integer` in docblock annotations
+  and treats it as the native `int` type. `Integer` is not a reserved word in
+  PHP, so it should be named `Integer` for consistency with other types in this
+  library. When using it, a class alias prevents static analysis from
+  complaining.
+* Mark `Guid\Guid` and `Nonstandard\Uuid` classes as `final`.
+* Add `uuid6()` method to `UuidFactoryInterface`.
+
+### Deprecated
+
+* `Uuid::UUID_TYPE_IDENTIFIER` is deprecated. Use `Uuid::UUID_TYPE_DCE_SECURITY`
+  instead.
+* `Uuid::VALID_PATTERN` is deprecated. Use `Validator\GenericValidator::VALID_PATTERN`
+  instead.
+
+
+## 4.0.0-alpha3 - 2020-02-21
+
+### Fixed
+
+* Fix microsecond rounding error on 32-bit systems.
+
+
+## 4.0.0-alpha2 - 2020-02-21
+
+### Added
+
+* Add `Uuid::fromDateTime()` to create version 1 UUIDs from instances of
+  `\DateTimeInterface`.
+* Add `Generator\NameGeneratorInterface` to support alternate methods of
+  generating bytes for version 3 and version 5 name-based UUID. By default,
+  ramsey/uuid uses the `Generator\DefaultNameGenerator`, which uses the standard
+  algorithm this library has used since the beginning. You may choose to use the
+  new `Generator\PeclUuidNameGenerator` to make use of the new
+  `uuid_generate_md5()` and `uuid_generate_sha1()` functions in ext-uuid version
+  1.1.0.
+
+### Changed
+
+* Add `fromDateTime()` method to `UuidFactoryInterface`.
+* Change `UuidInterface::getHex()` to return a `Ramsey\Uuid\Type\Hexadecimal` instance.
+* Change `UuidInterface::getInteger()` to return a `Ramsey\Uuid\Type\IntegerValue` instance.
+
+### Fixed
+
+* Round microseconds to six digits when getting DateTime from v1 UUIDs. This
+  circumvents a needless exception for an otherwise valid time-based UUID.
+
+
+## 4.0.0-alpha1 - 2020-01-22
+
+### Added
+
+* Add `Validator\ValidatorInterface` and `Validator\GenericValidator` to allow
+  flexibility in validating UUIDs/GUIDs.
+  * Add ability to change the default validator used by `Uuid` through
+    `FeatureSet::setValidator()`.
+  * Add `getValidator()` and `setValidator()` to `UuidFactory`.
+* Add an internal `InvalidArgumentException` that descends from the built-in
+  PHP `\InvalidArgumentException`. All places that used to throw
+  `\InvalidArgumentException` now throw `Ramsey\Uuid\Exception\InvalidArgumentException`.
+  This should not cause any BC breaks, however.
+* Add an internal `DateTimeException` that descends from the built-in PHP
+  `\RuntimeException`. `Uuid::getDateTime()` may throw this exception if
+  `\DateTimeImmutable` throws an error or exception.
+* Add `RandomSourceException` that descends from the built-in PHP
+  `\RuntimeException`. `DefaultTimeGenerator`, `RandomBytesGenerator`, and
+  `RandomNodeProvider` may throw this exception if `random_bytes()` or
+  `random_int()` throw an error or exception.
+* Add `Fields\FieldsInterface` and `Rfc4122\FieldsInterface` to define
+  field layouts for UUID variants. The implementations `Rfc4122\Fields`,
+  `Guid\Fields`, and `Nonstandard\Fields` store the 16-byte,
+  binary string representation of the UUID internally, and these manage
+  conversion of the binary string into the hexadecimal field values.
+* Add `Rfc4122\UuidInterface` to specifically represent RFC 4122 variant UUIDs.
+* Add classes to represent each version of RFC 4122 UUID. When generating new
+  UUIDs or creating UUIDs from existing strings, bytes, or integers, if the UUID
+  is an RFC 4122 variant, one of these instances will be returned:
+  * `Rfc4122\UuidV1`
+  * `Rfc4122\UuidV2`
+  * `Rfc4122\UuidV3`
+  * `Rfc4122\UuidV4`
+  * `Rfc4122\UuidV5`
+  * `Rfc4122\NilUuid`
+* Add `Rfc4122\UuidBuilder` to build RFC 4122 variant UUIDs. This replaces the
+  existing `Builder\DefaultUuidBuilder`, which is now deprecated.
+* Add ability to generate version 2 (DCE Security) UUIDs, including the static
+  method `Uuid::uuid2()`, which returns an `Rfc4122\UuidV2` instance.
+* Add classes to represent GUIDs and nonstandard (non-RFC 4122 variant) UUIDs:
+  * `Guid\Guid`
+  * `Nonstandard\Uuid`.
+* Introduce a `Builder\FallbackBuilder`, used by `FeatureSet` to help decide
+  whether to return a `Uuid` or `Nonstandard\Uuid` when decoding a
+  UUID string or bytes.
+* Introduce `Type\Hexadecimal`, `Type\IntegerValue`, and `Type\Time` for
+  improved type-safety when dealing with arbitrary string values.
+* Introduce `Math\CalculatorInterface` for representing calculators to perform
+  arithmetic operations on integers.
+* Depend on [brick/math](https://github.com/brick/math) for the
+  `Math\BrickMathCalculator`, which is the default calculator used by this
+  library when math cannot be performed in native PHP due to integer size
+  limitations. The calculator is configurable and may be changed, if desired.
+* Add `Converter\Number\GenericNumberConverter` and
+  `Converter\Time\GenericTimeConverter` which will use the calculator provided
+  to convert numbers and time to values for UUIDs.
+* The `\DateTimeInterface` instance returned by `UuidInterface::getDateTime()`
+  (and now `Rfc4122\UuidV1::getDateTime()`) now includes microseconds, as
+  specified by the version 1 UUID.
+
+### Changed
+
+* Set minimum required PHP version to 7.2.
+* Add `__toString()` method to `UuidInterface`.
+* The `UuidInterface::getDateTime()` method now specifies `\DateTimeInterface`
+  as the return value, rather than `\DateTime`; `Uuid::getDateTime()` now
+  returns an instance of `\DateTimeImmutable` instead of `\DateTime`.
+* Add `getFields()` method to `UuidInterface`.
+* Add `getValidator()` method to `UuidFactoryInterface`.
+* Add `uuid2()` method to `UuidFactoryInterface`.
+* Add `convertTime()` method to `Converter\TimeConverterInterface`.
+* Add `getTime()` method to `Provider\TimeProviderInterface`.
+* Change `Uuid::getFields()` to return an instance of `Fields\FieldsInterface`.
+  Previously, it returned an array of integer values (on 64-bit systems only).
+* Change the first required constructor parameter for `Uuid` from
+  `array $fields` to `Rfc4122\FieldsInterface $fields`.
+* Introduce `Converter\TimeConverterInterface $timeConverter` as fourth required
+  constructor parameter for `Uuid` and second required constructor parameter for
+  `Builder\DefaultUuidBuilder`.
+* Change `UuidInterface::getInteger()` to always return a `string` value instead
+  of `mixed`. This is a string representation of a 128-bit integer. You may then
+  use a math library of your choice (bcmath, gmp, etc.) to operate on the
+  string integer.
+* Change the second required parameter of `Builder\UuidBuilderInterface::build()`
+  from `array $fields` to `string $bytes`. Rather than accepting an array of
+  hexadecimal strings as UUID fields, the `build()` method now expects a byte
+  string.
+* `Generator\DefaultTimeGenerator` no longer adds the variant and version bits
+  to the bytes it returns. These must be applied to the bytes afterwards.
+* `Converter/TimeConverterInterface::calculateTime()` now returns
+  `Type\Hexadecimal` instead of `array`. The value is the full UUID timestamp
+  value (count of 100-nanosecond intervals since the Gregorian calendar epoch)
+  in hexadecimal format.
+* Change methods in converter interfaces to accept and return string values
+  instead of `mixed`; this simplifies the interface and makes it consistent:
+  * `NumberConverterInterface::fromHex(string $hex): string`
+  * `NumberConverterInterface::toHex(string $number): string`
+  * `TimeConverterInterface::calculateTime(string $seconds, string $microseconds): array`
+* `UnsupportedOperationException` is now descended from `\LogicException`.
+  Previously, it descended from `\RuntimeException`.
+* When encoding to bytes or decoding from bytes, `OrderedTimeCodec` now checks
+  whether the UUID is an RFC 4122 variant, version 1 UUID. If not, it will throw
+  an exception—`InvalidArgumentException` when using
+  `OrderedTimeCodec::encodeBinary()` and `UnsupportedOperationException` when
+  using `OrderedTimeCodec::decodeBytes()`.
+* Out of the box, `Uuid::fromString()`, `Uuid::fromBytes()`, and
+  `Uuid::fromInteger()` will now return either an `Rfc4122\UuidInterface`
+  instance or an instance of `Nonstandard\Uuid`, depending on whether the input
+  contains an RFC 4122 variant UUID with a valid version identifier. Both
+  implement `UuidInterface`, so BC breaks should not occur if typehints use the
+  interface.
+* By default, the following static methods will now return the specific instance
+  types. This should not cause any BC breaks if typehints target `UuidInterface`:
+  * `Uuid::uuid1` returns `Rfc4122\UuidV1`
+  * `Uuid::uuid3` returns `Rfc4122\UuidV3`
+  * `Uuid::uuid4` returns `Rfc4122\UuidV4`
+  * `Uuid::uuid5` returns `Rfc4122\UuidV5`
+
+### Deprecated
+
+The following functionality is deprecated and will be removed in ramsey/uuid
+5.0.0.
+
+* The following methods from `UuidInterface` and `Uuid` are deprecated. Use their
+  counterparts on the `Rfc4122\FieldsInterface` returned by `Uuid::getFields()`.
+  * `getClockSeqHiAndReservedHex()`
+  * `getClockSeqLowHex()`
+  * `getClockSequenceHex()`
+  * `getFieldsHex()`
+  * `getNodeHex()`
+  * `getTimeHiAndVersionHex()`
+  * `getTimeLowHex()`
+  * `getTimeMidHex()`
+  * `getTimestampHex()`
+  * `getVariant()`
+  * `getVersion()`
+* The following methods from `Uuid` are deprecated. Use the `Rfc4122\FieldsInterface`
+  instance returned by `Uuid::getFields()` to get the `Type\Hexadecimal` value
+  for these fields, and then use the arbitrary-precision arithmetic library of
+  your choice to convert them to string integers.
+  * `getClockSeqHiAndReserved()`
+  * `getClockSeqLow()`
+  * `getClockSequence()`
+  * `getNode()`
+  * `getTimeHiAndVersion()`
+  * `getTimeLow()`
+  * `getTimeMid()`
+  * `getTimestamp()`
+* `getDateTime()` on `UuidInterface` and `Uuid` is deprecated. Use this method
+  only on instances of `Rfc4122\UuidV1`.
+* `getUrn()` on `UuidInterface` and `Uuid` is deprecated. It is available on
+  `Rfc4122\UuidInterface` and classes that implement it.
+* The following methods are deprecated and have no direct replacements. However,
+  you may obtain the same information by calling `UuidInterface::getHex()` and
+  splitting the return value in half.
+  * `UuidInterface::getLeastSignificantBitsHex()`
+  * `UuidInterface::getMostSignificantBitsHex()`
+  * `Uuid::getLeastSignificantBitsHex()`
+  * `Uuid::getMostSignificantBitsHex()`
+  * `Uuid::getLeastSignificantBits()`
+  * `Uuid::getMostSignificantBits()`
+* `UuidInterface::getNumberConverter()` and `Uuid::getNumberConverter()` are
+  deprecated. There is no alternative recommendation, so plan accordingly.
+* `Builder\DefaultUuidBuilder` is deprecated; transition to
+  `Rfc4122\UuidBuilder`.
+* `Converter\Number\BigNumberConverter` is deprecated; transition to
+  `Converter\Number\GenericNumberConverter`.
+* `Converter\Time\BigNumberTimeConverter` is deprecated; transition to
+  `Converter\Time\GenericTimeConverter`.
+* `Provider\TimeProviderInterface::currentTime()` is deprecated; transition to
+  the `getTimestamp()` method on the same interface.
+* The classes for representing and generating *degraded* UUIDs are deprecated.
+  These are no longer necessary; this library now behaves the same on 32-bit and
+  64-bit PHP.
+  * `Builder\DegradedUuidBuilder`
+  * `Converter\Number\DegradedNumberConverter`
+  * `Converter\Time\DegradedTimeConverter`
+  * `DegradedUuid`
+
+### Removed
+
+* Remove the following bytes generators and recommend
+  `Generator\RandomBytesGenerator` as a suitable replacement:
+  * `Generator\MtRandGenerator`
+  * `Generator\OpenSslGenerator`
+  * `Generator\SodiumRandomGenerator`
+* Remove `Exception\UnsatisfiedDependencyException`. This library no longer
+  throws this exception.
+
+
 ## 3.9.7 - 2022-12-19
 
 ### Fixed
@@ -614,9 +1450,13 @@ versions leading up to this release.*
 [comb sequential uuids]: http://www.informit.com/articles/article.aspx?p=25862&seqNum=7
 [paragonie/random_compat]: https://github.com/paragonie/random_compat
 [collision issue]: https://github.com/ramsey/uuid/issues/80
-[contributor code of conduct]: https://github.com/ramsey/uuid/blob/master/.github/CODE_OF_CONDUCT.md
+[contributor code of conduct]: https://github.com/ramsey/uuid/blob/main/CODE_OF_CONDUCT.md
 [pecl libsodium extension]: http://pecl.php.net/package/libsodium
 [ircmaxell/random-lib]: https://github.com/ircmaxell/RandomLib
 [doctrine field type]: http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
 [ramsey/uuid-doctrine]: https://github.com/ramsey/uuid-doctrine
 [ramsey/uuid-console]: https://github.com/ramsey/uuid-console
+[version6]: https://datatracker.ietf.org/doc/html/draft-ietf-uuidrev-rfc4122bis-00#section-5.6
+[version7]: https://datatracker.ietf.org/doc/html/draft-ietf-uuidrev-rfc4122bis-00#section-5.7
+[version8]: https://datatracker.ietf.org/doc/html/draft-ietf-uuidrev-rfc4122bis-00#section-5.8
+[max uuids]: https://datatracker.ietf.org/doc/html/draft-peabody-dispatch-new-uuid-format-04#section-5.4

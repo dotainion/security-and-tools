@@ -1,125 +1,144 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Codec;
 
+use InvalidArgumentException;
+use Mockery;
+use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Builder\UuidBuilderInterface;
 use Ramsey\Uuid\Codec\StringCodec;
+use Ramsey\Uuid\Rfc4122\Fields;
+use Ramsey\Uuid\Rfc4122\FieldsInterface;
 use Ramsey\Uuid\Test\TestCase;
 use Ramsey\Uuid\UuidInterface;
 
-/**
- * Class StringCodecTest
- * @package Ramsey\Uuid\Test\Codec
- * @covers Ramsey\Uuid\Codec\StringCodec
- */
+use function hex2bin;
+use function implode;
+use function pack;
+
 class StringCodecTest extends TestCase
 {
-
-    /** @var UuidBuilderInterface */
+    /**
+     * @var UuidBuilderInterface & MockObject
+     */
     private $builder;
-    /** @var UuidInterface */
+
+    /**
+     * @var UuidInterface & MockObject
+     */
     private $uuid;
-    /** @var array */
+
+    /**
+     * @var Fields
+     */
     private $fields;
-    /** @var string */
-    private $uuidString = '12345678-1234-abcd-abef-1234abcd4321';
 
-    protected function set_up() // phpcs:ignore
+    /**
+     * @var string
+     */
+    private $uuidString = '12345678-1234-4bcd-abef-1234abcd4321';
+
+    protected function setUp(): void
     {
-        parent::set_up();
-        $this->builder = $this->getMockBuilder('Ramsey\Uuid\Builder\UuidBuilderInterface')->getMock();
-        $this->uuid = $this->getMockBuilder('Ramsey\Uuid\UuidInterface')->getMock();
-        $this->fields = ['time_low' => '12345678',
-            'time_mid' => '1234',
-            'time_hi_and_version' => 'abcd',
-            'clock_seq_hi_and_reserved' => 'ab',
-            'clock_seq_low' => 'ef',
-            'node' => '1234abcd4321'];
+        parent::setUp();
+        $this->builder = $this->getMockBuilder(UuidBuilderInterface::class)->getMock();
+        $this->uuid = $this->getMockBuilder(UuidInterface::class)->getMock();
+        $this->fields = new Fields((string) hex2bin('1234567812344bcdabef1234abcd4321'));
     }
 
-    protected function tear_down() // phpcs:ignore
+    protected function tearDown(): void
     {
-        parent::tear_down();
-        $this->builder = null;
-        $this->uuid = null;
-        $this->fields = null;
+        parent::tearDown();
+        unset($this->builder, $this->uuid, $this->fields);
     }
 
-    public function testEncodeUsesFieldsArray()
+    public function testEncodeUsesFieldsArray(): void
     {
         $this->uuid->expects($this->once())
-            ->method('getFieldsHex')
+            ->method('getFields')
             ->willReturn($this->fields);
         $codec = new StringCodec($this->builder);
         $codec->encode($this->uuid);
     }
 
-    public function testEncodeReturnsFormattedString()
+    public function testEncodeReturnsFormattedString(): void
     {
-        $this->uuid->method('getFieldsHex')
+        $this->uuid->method('getFields')
             ->willReturn($this->fields);
         $codec = new StringCodec($this->builder);
         $result = $codec->encode($this->uuid);
-        $this->assertEquals($this->uuidString, $result);
+        $this->assertSame($this->uuidString, $result);
     }
 
-    public function testEncodeBinaryUsesHexadecimalValue()
-    {
-        $this->uuid->expects($this->once())
-            ->method('getHex')
-            ->willReturn('123456781234abcdabef1234abcd4321');
-        $codec = new StringCodec($this->builder);
-        $codec->encodeBinary($this->uuid);
-    }
-
-    public function testEncodeBinaryReturnsBinaryString()
+    public function testEncodeBinaryReturnsBinaryString(): void
     {
         $expected = hex2bin('123456781234abcdabef1234abcd4321');
-        $this->uuid->method('getHex')
-            ->willReturn('123456781234abcdabef1234abcd4321');
+
+        $fields = Mockery::mock(FieldsInterface::class, [
+            'getBytes' => hex2bin('123456781234abcdabef1234abcd4321'),
+        ]);
+
+        $this->uuid->method('getFields')->willReturn($fields);
+
         $codec = new StringCodec($this->builder);
         $result = $codec->encodeBinary($this->uuid);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
-    public function testDecodeUsesBuilderOnFields()
+    public function testDecodeUsesBuilderOnFields(): void
     {
-        $string = 'uuid:12345678-1234-abcd-abef-1234abcd4321';
+        $fields = [
+            'time_low' => $this->fields->getTimeLow()->toString(),
+            'time_mid' => $this->fields->getTimeMid()->toString(),
+            'time_hi_and_version' => $this->fields->getTimeHiAndVersion()->toString(),
+            'clock_seq_hi_and_reserved' => $this->fields->getClockSeqHiAndReserved()->toString(),
+            'clock_seq_low' => $this->fields->getClockSeqLow()->toString(),
+            'node' => $this->fields->getNode()->toString(),
+        ];
+
+        $bytes = hex2bin(implode('', $fields));
+
+        $string = 'uuid:12345678-1234-4bcd-abef-1234abcd4321';
         $this->builder->expects($this->once())
             ->method('build')
-            ->with($this->isInstanceOf('Ramsey\Uuid\Codec\StringCodec'), $this->fields);
+            ->with($this->isInstanceOf(StringCodec::class), $bytes);
         $codec = new StringCodec($this->builder);
         $codec->decode($string);
     }
 
-    public function testDecodeThrowsExceptionOnInvalidUuid()
+    public function testDecodeThrowsExceptionOnInvalidUuid(): void
     {
         $string = 'invalid-uuid';
-        $this->expectException('\InvalidArgumentException');
         $codec = new StringCodec($this->builder);
+
+        $this->expectException(InvalidArgumentException::class);
         $codec->decode($string);
     }
 
-    public function testDecodeReturnsUuidFromBuilder()
+    public function testDecodeReturnsUuidFromBuilder(): void
     {
         $string = 'uuid:12345678-1234-abcd-abef-1234abcd4321';
         $this->builder->method('build')
             ->willReturn($this->uuid);
         $codec = new StringCodec($this->builder);
         $result = $codec->decode($string);
-        $this->assertEquals($this->uuid, $result);
+        $this->assertSame($this->uuid, $result);
     }
 
-    public function testDecodeBytesThrowsExceptionWhenBytesStringNotSixteenCharacters()
+    public function testDecodeBytesThrowsExceptionWhenBytesStringNotSixteenCharacters(): void
     {
         $string = '61';
         $bytes = pack('H*', $string);
         $codec = new StringCodec($this->builder);
-        $this->expectException('InvalidArgumentException', '$bytes string should contain 16 characters.');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$bytes string should contain 16 characters.');
         $codec->decodeBytes($bytes);
     }
 
-    public function testDecodeBytesReturnsUuid()
+    public function testDecodeBytesReturnsUuid(): void
     {
         $string = '123456781234abcdabef1234abcd4321';
         $bytes = pack('H*', $string);
@@ -127,6 +146,6 @@ class StringCodecTest extends TestCase
         $this->builder->method('build')
             ->willReturn($this->uuid);
         $result = $codec->decodeBytes($bytes);
-        $this->assertEquals($this->uuid, $result);
+        $this->assertSame($this->uuid, $result);
     }
 }

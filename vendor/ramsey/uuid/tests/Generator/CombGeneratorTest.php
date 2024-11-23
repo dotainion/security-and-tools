@@ -1,55 +1,78 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Generator;
 
+use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use Ramsey\Uuid\Converter\NumberConverterInterface;
+use Ramsey\Uuid\Exception\InvalidArgumentException;
 use Ramsey\Uuid\Generator\CombGenerator;
+use Ramsey\Uuid\Generator\RandomGeneratorInterface;
 use Ramsey\Uuid\Test\TestCase;
 
-/**
- * Class CombGeneratorTest
- * @package Ramsey\Uuid\Test\Generator
- * @covers Ramsey\Uuid\Generator\CombGenerator
- */
+use function bin2hex;
+use function dechex;
+use function hex2bin;
+use function str_pad;
+
+use const STR_PAD_LEFT;
+
 class CombGeneratorTest extends TestCase
 {
+    /**
+     * @var int
+     */
     private $timestampBytes = 6;
 
-    public function testGenerateUsesRandomGeneratorWithLengthMinusTimestampBytes()
+    public function testGenerateUsesRandomGeneratorWithLengthMinusTimestampBytes(): void
     {
         $length = 10;
-        $expectedLength = ($length - $this->timestampBytes);
-        $randomGenerator = $this->getMockBuilder('Ramsey\Uuid\Generator\RandomGeneratorInterface')->getMock();
+        $expectedLength = $length - $this->timestampBytes;
+
+        /** @var MockObject & RandomGeneratorInterface $randomGenerator */
+        $randomGenerator = $this->getMockBuilder(RandomGeneratorInterface::class)->getMock();
         $randomGenerator->expects($this->once())
             ->method('generate')
             ->with($expectedLength);
-        $converter = $this->getMockBuilder('Ramsey\Uuid\Converter\NumberConverterInterface')->getMock();
+
+        /** @var MockObject & NumberConverterInterface $converter */
+        $converter = $this->getMockBuilder(NumberConverterInterface::class)->getMock();
+
         $generator = new CombGenerator($randomGenerator, $converter);
         $generator->generate($length);
     }
 
-    public function testGenerateCalculatesPaddedHexStringFromCurrentTimestamp()
+    public function testGenerateCalculatesPaddedHexStringFromCurrentTimestamp(): void
     {
-        $randomGenerator = $this->getMockBuilder('Ramsey\Uuid\Generator\RandomGeneratorInterface')->getMock();
-        $converter = $this->getMockBuilder('Ramsey\Uuid\Converter\NumberConverterInterface')->getMock();
+        /** @var MockObject & RandomGeneratorInterface $randomGenerator */
+        $randomGenerator = $this->getMockBuilder(RandomGeneratorInterface::class)->getMock();
+
+        /** @var MockObject & NumberConverterInterface $converter */
+        $converter = $this->getMockBuilder(NumberConverterInterface::class)->getMock();
         $converter->expects($this->once())
             ->method('toHex')
             ->with($this->isType('string'));
+
         $generator = new CombGenerator($randomGenerator, $converter);
         $generator->generate(10);
     }
 
-    public function testGenerateReturnsBinaryStringCreatedFromGeneratorAndConverter()
+    public function testGenerateReturnsBinaryStringCreatedFromGeneratorAndConverter(): void
     {
         $length = 20;
         $hash = dechex(1234567891);
         $timeHash = dechex(1458147405);
 
-        $randomGenerator = $this->getMockBuilder('Ramsey\Uuid\Generator\RandomGeneratorInterface')->getMock();
+        /** @var MockObject & RandomGeneratorInterface $randomGenerator */
+        $randomGenerator = $this->getMockBuilder(RandomGeneratorInterface::class)->getMock();
         $randomGenerator->method('generate')
-            ->with(($length - $this->timestampBytes))
+            ->with($length - $this->timestampBytes)
             ->willReturn($hash);
 
-        $converter = $this->getMockBuilder('Ramsey\Uuid\Converter\NumberConverterInterface')->getMock();
+        /** @var MockObject & NumberConverterInterface $converter */
+        $converter = $this->getMockBuilder(NumberConverterInterface::class)->getMock();
         $converter->method('toHex')
             ->with($this->isType('string'))
             ->willReturn($timeHash);
@@ -60,34 +83,52 @@ class CombGeneratorTest extends TestCase
         $generator = new CombGenerator($randomGenerator, $converter);
         $returned = $generator->generate($length);
         $this->assertIsString($returned);
-        $this->assertEquals($expected, $returned);
+        $this->assertSame($expected, $returned);
     }
 
-    public function lengthLessThanSix()
+    /**
+     * @return array<array{0: int}>
+     */
+    public function lengthLessThanSix(): array
     {
         return [[0], [1], [2], [3], [4], [5]];
     }
 
     /**
+     * @param int<1, max> $length
+     *
+     * @throws Exception
+     *
      * @dataProvider lengthLessThanSix
-     * @param $length
-     * @throws \Exception
      */
-    public function testGenerateWithLessThanTimestampBytesThrowsException($length)
+    public function testGenerateWithLessThanTimestampBytesThrowsException(int $length): void
     {
-        $this->expectException('InvalidArgumentException');
-        $randomGenerator = $this->getMockBuilder('Ramsey\Uuid\Generator\RandomGeneratorInterface')->getMock();
-        $converter = $this->getMockBuilder('Ramsey\Uuid\Converter\NumberConverterInterface')->getMock();
+        /** @var MockObject & RandomGeneratorInterface $randomGenerator */
+        $randomGenerator = $this->getMockBuilder(RandomGeneratorInterface::class)->getMock();
+
+        /** @var MockObject & NumberConverterInterface $converter */
+        $converter = $this->getMockBuilder(NumberConverterInterface::class)->getMock();
+
         $generator = new CombGenerator($randomGenerator, $converter);
+
+        $this->expectException(InvalidArgumentException::class);
         $generator->generate($length);
     }
 
-    public function testGenerateWithOddNumberOverTimestampBytesCausesError()
+    /**
+     * @throws Exception
+     */
+    public function testGenerateWithOddNumberOverTimestampBytesCausesError(): void
     {
-        $this->expectError();
-        $randomGenerator = $this->getMockBuilder('Ramsey\Uuid\Generator\RandomGeneratorInterface')->getMock();
-        $converter = $this->getMockBuilder('Ramsey\Uuid\Converter\NumberConverterInterface')->getMock();
+        /** @var MockObject & RandomGeneratorInterface $randomGenerator */
+        $randomGenerator = $this->getMockBuilder(RandomGeneratorInterface::class)->getMock();
+
+        /** @var MockObject & NumberConverterInterface $converter */
+        $converter = $this->getMockBuilder(NumberConverterInterface::class)->getMock();
+
         $generator = new CombGenerator($randomGenerator, $converter);
+
+        $this->expectError();
         $generator->generate(7);
     }
 }

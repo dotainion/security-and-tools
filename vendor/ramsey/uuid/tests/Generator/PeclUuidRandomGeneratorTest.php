@@ -1,49 +1,29 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Generator;
 
 use Ramsey\Uuid\Generator\PeclUuidRandomGenerator;
-use AspectMock\Test as AspectMock;
+use Ramsey\Uuid\Rfc4122\Fields;
+use Ramsey\Uuid\Test\TestCase;
+use Ramsey\Uuid\Uuid;
 
-/**
- * Class PeclUuidRandomGeneratorTest
- * @package Ramsey\Uuid\Test\Generator
- * @covers Ramsey\Uuid\Generator\PeclUuidRandomGenerator
- */
-class PeclUuidRandomGeneratorTest extends PeclUuidTestCase
+class PeclUuidRandomGeneratorTest extends TestCase
 {
-    private $length = 10; //Doesn't matter, it isn't used
-
     /**
-     * This test is just to check collaboration with the PECL UUID extension - not to check
-     * the correctness of the methods defined in that extension.
-     * So we are just checking that the UUID methods are called with the right parameters.
-     *
-     * @requires PHP < 8
+     * @requires extension uuid
      */
-    public function testGenerateCreatesUuidUsingPeclUuidMethods()
+    public function testGenerateCreatesUuidUsingPeclUuidMethods(): void
     {
-        $create = AspectMock::func('Ramsey\Uuid\Generator', 'uuid_create', $this->uuidString);
-        $parse = AspectMock::func('Ramsey\Uuid\Generator', 'uuid_parse', $this->uuidBinary);
-
         $generator = new PeclUuidRandomGenerator();
-        $generator->generate($this->length);
+        $bytes = $generator->generate(10);
+        $uuid = Uuid::fromBytes($bytes);
 
-        $create->verifyInvoked([UUID_TYPE_RANDOM]);
-        $parse->verifyInvoked([$this->uuidString]);
-    }
+        /** @var Fields $fields */
+        $fields = $uuid->getFields();
 
-    /**
-     * This test is for the return type of the generate method
-     * It ensures that the generate method returns whatever value uuid_parse returns.
-     *
-     * @requires PHP < 8
-     */
-    public function testGenerateReturnsUuidString()
-    {
-        AspectMock::func('Ramsey\Uuid\Generator', 'uuid_create', $this->uuidString);
-        AspectMock::func('Ramsey\Uuid\Generator', 'uuid_parse', $this->uuidBinary);
-        $generator = new PeclUuidRandomGenerator;
-        $uuid = $generator->generate($this->length);
-        $this->assertEquals($this->uuidBinary, $uuid);
+        $this->assertSame(16, strlen($bytes));
+        $this->assertSame(Uuid::UUID_TYPE_RANDOM, $fields->getVersion());
     }
 }

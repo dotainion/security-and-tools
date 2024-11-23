@@ -1,60 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Generator;
 
+use Exception;
+use Ramsey\Uuid\Exception\RandomSourceException;
 use Ramsey\Uuid\Generator\RandomBytesGenerator;
 use Ramsey\Uuid\Test\TestCase;
-use AspectMock\Test as AspectMock;
+use phpmock\mockery\PHPMockery;
 
-/**
- * Class RandomBytesGeneratorTest
- * @package Ramsey\Uuid\Test\Generator
- * @covers Ramsey\Uuid\Generator\RandomBytesGenerator
- */
+use function hex2bin;
+
 class RandomBytesGeneratorTest extends TestCase
 {
-    public function lengthAndHexDataProvider()
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification
+     */
+    public function lengthAndHexDataProvider(): array
     {
         return [
             [6, '4f17dd046fb8'],
             [10, '4d25f6fe5327cb04267a'],
-            [12, '1ea89f83bd49cacfdf119e24']
+            [12, '1ea89f83bd49cacfdf119e24'],
         ];
     }
 
     /**
+     * @param int<1, max> $length
+     *
+     * @throws Exception
+     *
      * @dataProvider lengthAndHexDataProvider
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @requires PHP < 8
-     * @param int $length
-     * @param string $hex
-     * @throws \Exception
      */
-    public function testGenerateUsesOpenSsl($length, $hex)
+    public function testGenerateReturnsRandomBytes(int $length, string $hex): void
     {
         $bytes = hex2bin($hex);
-        $openSsl = AspectMock::func('Ramsey\Uuid\Generator', 'random_bytes', $bytes);
-        $generator = new RandomBytesGenerator();
-        $generator->generate($length);
 
-        $openSsl->verifyInvokedOnce([$length]);
+        PHPMockery::mock('Ramsey\Uuid\Generator', 'random_bytes')
+            ->once()
+            ->with($length)
+            ->andReturn($bytes);
+
+        $generator = new RandomBytesGenerator();
+
+        $this->assertSame($bytes, $generator->generate($length));
     }
 
     /**
-     * @dataProvider lengthAndHexDataProvider
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @requires PHP < 8
-     * @param int $length
-     * @param string $hex
-     * @throws \Exception
      */
-    public function testGenerateReturnsRandomBytes($length, $hex)
+    public function testGenerateThrowsExceptionWhenExceptionThrownByRandombytes(): void
     {
-        $bytes = hex2bin($hex);
-        AspectMock::func('Ramsey\Uuid\Generator', 'random_bytes', $bytes);
+        PHPMockery::mock('Ramsey\Uuid\Generator', 'random_bytes')
+            ->once()
+            ->with(16)
+            ->andThrow(new Exception('Could not gather sufficient random data'));
+
         $generator = new RandomBytesGenerator();
-        $this->assertEquals($bytes, $generator->generate($length));
+
+        $this->expectException(RandomSourceException::class);
+        $this->expectExceptionMessage('Could not gather sufficient random data');
+
+        $generator->generate(16);
     }
 }

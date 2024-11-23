@@ -1,35 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Provider\Time;
 
 use Ramsey\Uuid\Provider\Time\FixedTimeProvider;
 use Ramsey\Uuid\Test\TestCase;
+use Ramsey\Uuid\Type\Time;
 
 class FixedTimeProviderTest extends TestCase
 {
-
-    public function testConstructorRequiresSecAndUsec()
+    public function testGetTimeReturnsTime(): void
     {
-        $this->expectException('InvalidArgumentException');
-        $provider = new FixedTimeProvider([]);
+        $time = new Time(1458844556, 200997);
+        $provider = new FixedTimeProvider($time);
+
+        $this->assertSame($time, $provider->getTime());
     }
 
-    public function testCurrentTimeReturnsTimestamp()
+    public function testGetTimeReturnsTimeAfterChange(): void
     {
-        $timestamp = ['sec' => 1458844556, 'usec' => 200997];
-        $provider = new FixedTimeProvider($timestamp);
-        $this->assertEquals($timestamp, $provider->currentTime());
-    }
+        $time = new Time(1458844556, 200997);
+        $provider = new FixedTimeProvider($time);
 
-    public function testCurrentTimeReturnsTimestampAfterChange()
-    {
-        $timestamp = ['sec' => 1458844556, 'usec' => 200997];
-        $provider = new FixedTimeProvider($timestamp);
+        $this->assertSame('1458844556', $provider->getTime()->getSeconds()->toString());
+        $this->assertSame('200997', $provider->getTime()->getMicroseconds()->toString());
 
-        $newTimestamp = ['sec' => 1050804050, 'usec' => '30192'];
-        $provider->setSec($newTimestamp['sec']);
-        $provider->setUsec($newTimestamp['usec']);
+        $provider->setSec(1050804050);
 
-        $this->assertEquals($newTimestamp, $provider->currentTime());
+        $this->assertSame('1050804050', $provider->getTime()->getSeconds()->toString());
+        $this->assertSame('200997', $provider->getTime()->getMicroseconds()->toString());
+
+        $provider->setUsec(30192);
+
+        $this->assertSame('1050804050', $provider->getTime()->getSeconds()->toString());
+        $this->assertSame('30192', $provider->getTime()->getMicroseconds()->toString());
+
+        $this->assertNotSame($time, $provider->getTime());
     }
 }

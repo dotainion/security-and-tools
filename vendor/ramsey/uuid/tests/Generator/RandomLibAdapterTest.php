@@ -1,72 +1,67 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ramsey\Uuid\Test\Generator;
 
+use Mockery;
+use Mockery\MockInterface;
 use Ramsey\Uuid\Generator\RandomLibAdapter;
 use Ramsey\Uuid\Test\TestCase;
-use Mockery;
+use RandomLib\Factory as RandomLibFactory;
+use RandomLib\Generator;
 
-/**
- * Class RandomLibAdapterTest
- * @package Ramsey\Uuid\Test\Generator
- * @covers Ramsey\Uuid\Generator\RandomLibAdapter
- */
 class RandomLibAdapterTest extends TestCase
 {
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
-    public function testAdapterWithGeneratorDoesNotCreateGenerator()
+    public function testAdapterWithGeneratorDoesNotCreateGenerator(): void
     {
-        $factory = Mockery::mock('overload:RandomLib\Factory');
-        $factory->shouldNotReceive('getHighStrengthGenerator')
-            ->getMock();
+        $factory = Mockery::mock('overload:' . RandomLibFactory::class);
+        $factory->shouldNotReceive('getHighStrengthGenerator');
 
-        $generator = $this->getMockBuilder('RandomLib\Generator')
+        $generator = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertInstanceOf(
-            'Ramsey\Uuid\Generator\RandomGeneratorInterface',
-            new RandomLibAdapter($generator)
-        );
+        $this->assertInstanceOf(RandomLibAdapter::class, new RandomLibAdapter($generator));
     }
 
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
-    public function testAdapterWithoutGeneratorGreatesGenerator()
+    public function testAdapterWithoutGeneratorGreatesGenerator(): void
     {
-        $factory = Mockery::mock('overload:RandomLib\Factory');
-        $factory->shouldReceive('getHighStrengthGenerator')
-            ->once()
-            ->getMock();
+        $generator = Mockery::mock(Generator::class);
 
-        $this->assertInstanceOf(
-            'Ramsey\Uuid\Generator\RandomGeneratorInterface',
-            new RandomLibAdapter()
-        );
+        /** @var RandomLibFactory&MockInterface $factory */
+        $factory = Mockery::mock('overload:' . RandomLibFactory::class);
+        $factory->expects()->getHighStrengthGenerator()->andReturns($generator);
+
+        $this->assertInstanceOf(RandomLibAdapter::class, new RandomLibAdapter());
     }
 
-    public function testGenerateUsesGenerator()
+    public function testGenerateUsesGenerator(): void
     {
         $length = 10;
-        $generator = $this->getMockBuilder('RandomLib\Generator')
+        $generator = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $generator->expects($this->once())
             ->method('generate')
-            ->with($length);
+            ->with($length)
+            ->willReturn('foo');
 
         $adapter = new RandomLibAdapter($generator);
         $adapter->generate($length);
     }
 
-    public function testGenerateReturnsString()
+    public function testGenerateReturnsString(): void
     {
-        $generator = $this->getMockBuilder('RandomLib\Generator')
+        $generator = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $generator->expects($this->once())
@@ -75,6 +70,6 @@ class RandomLibAdapterTest extends TestCase
 
         $adapter = new RandomLibAdapter($generator);
         $result = $adapter->generate(1);
-        $this->assertEquals('random-string', $result);
+        $this->assertSame('random-string', $result);
     }
 }
