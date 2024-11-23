@@ -3,7 +3,7 @@
         'name' => 'dotainion/security-tools',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e4e03a1892728b094363915388d526fa3805d8e9',
+        'reference' => 'd4314430aeb31ecc523ffbc4eaa139d60187b609',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'dotainion/security-tools' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e4e03a1892728b094363915388d526fa3805d8e9',
+            'reference' => 'd4314430aeb31ecc523ffbc4eaa139d60187b609',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -78,6 +78,15 @@
             'replaced' => array(
                 0 => '4.7.6',
             ),
+        ),
+        'symfony/polyfill-php80' => array(
+            'pretty_version' => 'v1.31.0',
+            'version' => '1.31.0.0',
+            'reference' => '60328e362d4c2c802a54fcbf04f9d3fb892b4cf8',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/polyfill-php80',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
     ),
 );
