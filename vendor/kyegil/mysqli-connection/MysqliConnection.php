@@ -28,6 +28,9 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
      */
     public $table_prefix = '';
 
+    /** @var LoggerInterface */
+    protected $logger;
+
     /**
      * MysqliConnection constructor.
      */
@@ -42,12 +45,14 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
         parent::__construct($hostname, $username, $password, $database, $port, $socket);
         $this->query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
         $this->query("SET TIME_ZONE = '-0:00'"); // All time is saved as GMT and converted later
-        $this->query("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
         $this->logQuery('MysqliConnection initialised');
     }
 
-    /** @var LoggerInterface */
-    protected $logger;
+    public function query($query, $result_mode = null)
+    {
+        $this->logQuery($query);
+        return parent::query($query, $result_mode);
+    }
 
     /**
      * Array Fields
@@ -188,6 +193,7 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
         if ($config->limit) {
             $countStatement->execute();
             $countResult = $countStatement->get_result();
+            $this->logQuery($sql, $bindValues);
             if (!$countResult) {
                 throw new Exception($this->error);
             }
@@ -198,12 +204,12 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
 
         $statement->execute();
         $resultSet = $statement->get_result();
+        $this->logQuery($sql, $bindValues);
         if (!$resultSet) {
             throw new Exception($this->error);
         }
         $result->data = [];
         $result->success = true;
-        $this->logQuery($sql, $bindValues);
 
         if($config->flat) {
             while($arr = $resultSet->fetch_row()) {
@@ -355,6 +361,7 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
             $statement->bind_param($types, ...$bindValues);
         }
 
+        $this->logQuery($sql, $bindValues);
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }

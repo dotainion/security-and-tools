@@ -3,7 +3,7 @@
     "description": "A package for managing login and other tools",
     "require": {
         "kyegil/mysqli-connection": "^1.3",
-        "ramsey/uuid": "^4.2",
+        "ramsey/uuid": "^3.9",
         "phpmailer/phpmailer": "^6.8",
         "dotainion/query-permission": "^1.0"
     },
