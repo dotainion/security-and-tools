@@ -3,7 +3,7 @@
         'name' => 'dotainion/security-tools',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '01ee8a26035df20c21694342f1c9cbd407307791',
+        'reference' => '3ec492a71d683e43f4104abe479d272c2cde4e5d',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'dotainion/security-tools' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '01ee8a26035df20c21694342f1c9cbd407307791',
+            'reference' => '3ec492a71d683e43f4104abe479d272c2cde4e5d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -78,15 +78,6 @@
             'replaced' => array(
                 0 => '4.2.3',
             ),
-        ),
-        'stripe/stripe-php' => array(
-            'pretty_version' => 'v16.2.0',
-            'version' => '16.2.0.0',
-            'reference' => '813ae4961755af28a13bda451689f7a6ed6498cb',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../stripe/stripe-php',
-            'aliases' => array(),
-            'dev_requirement' => false,
         ),
         'symfony/polyfill-ctype' => array(
             'pretty_version' => 'v1.28.0',
