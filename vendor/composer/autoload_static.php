@@ -8,14 +8,9 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
 {
     public static $files = array (
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
-        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
-        array (
-            'Symfony\\Polyfill\\Php80\\' => 23,
-        ),
         'R' => 
         array (
             'Ramsey\\Uuid\\' => 12,
@@ -36,10 +31,6 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symfony\\Polyfill\\Php80\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
-        ),
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
@@ -63,12 +54,7 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
     );
 
     public static $classMap = array (
-        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
-        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
-        'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'permission\\SqlRepository' => __DIR__ . '/..' . '/dotainion/query-permission/permission/SqlRepository.php',
         'permission\\database\\Column' => __DIR__ . '/..' . '/dotainion/query-permission/permission/database/Column.php',
         'permission\\database\\Join' => __DIR__ . '/..' . '/dotainion/query-permission/permission/database/Join.php',
