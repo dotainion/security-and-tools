@@ -3,7 +3,7 @@
         'name' => 'dotainion/security-tools',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '6d71651cd5258e16f182477ee4def842f194934f',
+        'reference' => '8f89b6c15a78889dc58a0705950e6785bfe5b1aa',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'dotainion/security-tools' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6d71651cd5258e16f182477ee4def842f194934f',
+            'reference' => '8f89b6c15a78889dc58a0705950e6785bfe5b1aa',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -78,6 +78,15 @@
             'replaced' => array(
                 0 => '4.7.6',
             ),
+        ),
+        'stripe/stripe-php' => array(
+            'pretty_version' => 'v16.5.1',
+            'version' => '16.5.1.0',
+            'reference' => '05c7c3a8a15b1bc396f09d17c88539c0db3d3255',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../stripe/stripe-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
     ),
 );

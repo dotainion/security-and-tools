@@ -11,6 +11,10 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
     );
 
     public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'Stripe\\' => 7,
+        ),
         'R' => 
         array (
             'Ramsey\\Uuid\\' => 12,
@@ -31,6 +35,10 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
     );
 
     public static $prefixDirsPsr4 = array (
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
