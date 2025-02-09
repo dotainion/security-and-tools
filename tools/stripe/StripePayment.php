@@ -18,27 +18,35 @@ class StripePayment
         $this->stripe = new StripeClient(Env::stripeSecret());
     }
 
-    public function createPaymentIntent(?Customer $customer, string $currency, float $amount, ?string $onBehalfOf = null): PaymentIntent
-    {
+    public function createPaymentIntent(?Customer $customer, string $currency, float $amount, ?string $onBehalfOf = null, ?string $paymentMethodId = null): PaymentIntent {
         try {
             $options = [];
-
+    
             if ($customer !== null) {
                 $options['customer'] = $customer->id;
             }
+
             if ($onBehalfOf !== null) {
                 $options['on_behalf_of'] = $onBehalfOf;
             }
-
-            return $this->stripe->paymentIntents->create([
+    
+            $paymentIntentOptions = [
                 'amount' => $amount * 100,
                 'currency' => $currency,
                 'automatic_payment_methods' => [
-                    'enabled' => true
+                    'enabled' => true,
                 ],
-                'customer' => $customer->id,
-                ...$options
-            ]);
+            ];
+    
+            if ($paymentMethodId !== null) {
+                $paymentIntentOptions['payment_method'] = $paymentMethodId;
+                $paymentIntentOptions['confirm'] = true;
+            }
+    
+            $paymentIntentOptions = array_merge($paymentIntentOptions, $options);
+    
+            return $this->stripe->paymentIntents->create($paymentIntentOptions);
+    
         } catch (Throwable $ex) {
             throw new InvalidArgumentException('Failed to create PaymentIntent: ' . $ex->getMessage());
         }
