@@ -1,0 +1,20 @@
+{
+    "name": "kyegil/mysqli-connection",
+    "description": "A simple mysql wrapper",
+    "version": "1.4.1",
+    "time": "2024-04-29",
+    
+    "readme": "README.md",
+    "license": ["GPL-3.0-or-later"],
+    
+    "require": {
+        "php": ">=7.1",
+        "ext-mysqli": "*"
+    },
+    
+    "autoload": {
+        "psr-4": {
+            "Kyegil\\MysqliConnection\\": ""
+        }
+    }
+}
