@@ -18,18 +18,8 @@ class StripePayment
         $this->stripe = new StripeClient(Env::stripeSecret());
     }
 
-    public function createPaymentIntent(?Customer $customer, string $currency, float $amount, ?string $onBehalfOf = null, ?string $paymentMethodId = null): PaymentIntent {
+    public function createPaymentIntent(?Customer $customer, string $currency, float $amount, ?string $onBehalfOf = null, ?string $paymentMethodId = null, ?string $destinationId = null, ?float $applicationFee = null): PaymentIntent {
         try {
-            $options = [];
-    
-            if ($customer !== null) {
-                $options['customer'] = $customer->id;
-            }
-
-            if ($onBehalfOf !== null) {
-                $options['on_behalf_of'] = $onBehalfOf;
-            }
-    
             $paymentIntentOptions = [
                 'amount' => $amount * 100,
                 'currency' => $currency,
@@ -39,13 +29,25 @@ class StripePayment
                 ],
             ];
     
+            if ($customer !== null) {
+                $paymentIntentOptions['customer'] = $customer->id;
+            }
+            if ($onBehalfOf !== null) {
+                $paymentIntentOptions['on_behalf_of'] = $onBehalfOf;
+            }
             if ($paymentMethodId !== null) {
                 $paymentIntentOptions['payment_method'] = $paymentMethodId;
                 $paymentIntentOptions['confirm'] = true;
             }
-    
-            $paymentIntentOptions = array_merge($paymentIntentOptions, $options);
-    
+            if ($destinationId !== null) {
+                $paymentIntentOptions['transfer_data'] = [
+                    'destination' => $destinationId
+                ];
+            }
+            if($applicationFee){
+                $paymentIntentOptions['application_fee_amount'] = $applicationFee;
+            }
+        
             return $this->stripe->paymentIntents->create($paymentIntentOptions);
     
         } catch (Throwable $ex) {
