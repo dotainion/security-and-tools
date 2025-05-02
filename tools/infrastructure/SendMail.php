@@ -5,7 +5,6 @@ use InvalidArgumentException;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-use tools\module\login\logic\FetchNotificationSetup;
 use tools\module\mail\objects\Attatchment;
 use tools\module\mail\objects\Mail;
 use Throwable;
@@ -16,12 +15,9 @@ class SendMail{
 
     public function __construct(){
         $this->img = new ImageHelper();
-        $fetchSetup = new FetchNotificationSetup();
 
-        $setup = $fetchSetup->fetchSetup();
-
-        if(!$setup->hasItem()){
-            throw new InvalidArgumentException('Email Notification not yet setup.');
+        if(!Env::emailAddress() || !Env::emailPassword()){
+            throw new InvalidArgumentException('This feature is not yet configured to send email notifications.');
         }
 
         $this->mail = new PHPMailer(true);
@@ -31,13 +27,13 @@ class SendMail{
         $this->mail->isSMTP();                                            //Send using SMTP
         $this->mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $this->mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $this->mail->Username   = $setup->first()->email()->toString();//'areset0000@gmail.com';                     //SMTP username
-        $this->mail->Password   = $setup->first()->password()->toControlString();//'nmczpulryktsbisr';                               //SMTP password
+        $this->mail->Username   = Env::emailAddress();  //'areset0000@gmail.com';                     //SMTP username
+        $this->mail->Password   = Env::emailPassword();  //'nmczpulryktsbisr';                               //SMTP password
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
         $this->mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
         //Recipients
-        $this->mail->setFrom($setup->first()->email()->toString(), 'Mailer');
+        $this->mail->setFrom(Env::emailAddress(), 'Mailer');
         /*$this->mail->addAddress('ellen@example.com');               //Name is optional
         $this->mail->addReplyTo('info@example.com', 'Information');
         $this->mail->addCC('cc@example.com');

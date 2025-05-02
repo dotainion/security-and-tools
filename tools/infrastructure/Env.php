@@ -117,23 +117,31 @@ class Env{
         return null;
     }
 
-    public static function server():string{
+    public static function server():?string{
         return self::env('DB_SERVER');
     }
 
-    public static function username():string{
+    public static function username():?string{
         return self::env('DB_USERNAME');
     }
 
-    public static function password():string{
+    public static function password():?string{
         return self::env('DB_PASSWORD');
     }
 
-    public static function database():string{
+    public static function database():?string{
         return self::env('DB_DATABASE');
     }
 
-    public static function stripeSecret():string{
+    public static function stripeSecret():?string{
         return self::env('STRIPE-SECRET');
+    }
+
+    public static function emailAddress():?string{
+        return self::env('DB_EMAIL_ADDRESS');
+    }
+
+    public static function emailPassword():?string{
+        return self::env('DB_EMAIL_PASSWORD');
     }
 }
