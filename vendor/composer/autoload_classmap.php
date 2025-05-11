@@ -73,6 +73,7 @@ return array(
     'tools\\infrastructure\\exeptions\\UrlNotFoundException' => $baseDir . '/tools/infrastructure/exeptions/UrlNotFoundException.php',
     'tools\\module\\login\\factory\\CredentialFactory' => $baseDir . '/tools/module/login/factory/CredentialFactory.php',
     'tools\\module\\login\\logic\\CreateCredential' => $baseDir . '/tools/module/login/logic/CreateCredential.php',
+    'tools\\module\\login\\logic\\SendMessage' => $baseDir . '/tools/module/messages/logic/SendMessage.php',
     'tools\\module\\login\\logic\\UpdateCredential' => $baseDir . '/tools/module/login/logic/UpdateCredential.php',
     'tools\\module\\login\\objects\\Credential' => $baseDir . '/tools/module/login/objects/Credential.php',
     'tools\\module\\login\\repository\\CredentialRepository' => $baseDir . '/tools/module/login/repository/CredentialRepository.php',
@@ -82,6 +83,7 @@ return array(
     'tools\\module\\login\\service\\GoogleLoginService' => $baseDir . '/tools/module/login/service/GoogleLoginService.php',
     'tools\\module\\login\\service\\LoginService' => $baseDir . '/tools/module/login/service/LoginService.php',
     'tools\\module\\login\\service\\LogoutService' => $baseDir . '/tools/module/login/service/LogoutService.php',
+    'tools\\module\\login\\service\\SendMessageService' => $baseDir . '/tools/module/messages/service/SendMessageService.php',
     'tools\\module\\login\\service\\SendRecoverEmailService' => $baseDir . '/tools/module/login/service/SendRecoverEmailService.php',
     'tools\\module\\login\\service\\UpdateCredentialByTokenService' => $baseDir . '/tools/module/login/service/UpdateCredentialByTokenService.php',
     'tools\\module\\login\\service\\UpdateCredentialService' => $baseDir . '/tools/module/login/service/UpdateCredentialService.php',
@@ -105,5 +107,6 @@ return array(
     'tools\\security\\Setup' => $baseDir . '/tools/security/Setup.php',
     'tools\\security\\ValidatePassword' => $baseDir . '/tools/security/ValidatePassword.php',
     'tools\\stripe\\StripeCustomer' => $baseDir . '/tools/stripe/StripeCustomer.php',
-    'tools\\stripe\\StripePayment' => $baseDir . '/tools/stripe/StripePayment.php',
+    'tools\\stripe\\StripePayment' => $baseDir . '/tools/stripe/StripeConnect.php',
+    'tools\\stripe\\StripeRefund' => $baseDir . '/tools/stripe/StripeRefund.php',
 );

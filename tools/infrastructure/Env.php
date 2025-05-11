@@ -144,4 +144,20 @@ class Env{
     public static function emailPassword():?string{
         return self::env('DB_EMAIL_PASSWORD');
     }
+
+    public static function pusherAppKey():?string{
+        return self::env('PUSHER_APP_KEY');
+    }
+
+    public static function pusherAppSecret():?string{
+        return self::env('PUSHER_APP_SECRET');
+    }
+
+    public static function pusherAppId():?string{
+        return self::env('PUSHER_APP_ID');
+    }
+
+    public static function pusherAppCluster():?string{
+        return self::env('PUSHER_APP_CLUSTER');
+    }
 }

@@ -6,7 +6,8 @@
         "ramsey/uuid": "^4.2",
         "phpmailer/phpmailer": "^6.8",
         "dotainion/query-permission": "^1.0",
-        "stripe/stripe-php": "11.0"
+        "stripe/stripe-php": "11.0",
+        "pusher/pusher-php-server": "^7.2"
     },
     "autoload": {
         "classmap": [

@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
 {
     public static $files = array (
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
 
@@ -22,11 +26,21 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
         ),
         'P' => 
         array (
+            'Pusher\\' => 7,
+            'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
         'K' => 
         array (
             'Kyegil\\MysqliConnection\\' => 24,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
         ),
         'B' => 
         array (
@@ -47,6 +61,23 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
+        'Pusher\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pusher/pusher-php-server/src',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+        ),
+        'Psr\\Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
@@ -54,6 +85,18 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
         'Kyegil\\MysqliConnection\\' => 
         array (
             0 => __DIR__ . '/..' . '/kyegil/mysqli-connection',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
         'Brick\\Math\\' => 
         array (
@@ -129,6 +172,7 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
         'tools\\infrastructure\\exeptions\\UrlNotFoundException' => __DIR__ . '/../..' . '/tools/infrastructure/exeptions/UrlNotFoundException.php',
         'tools\\module\\login\\factory\\CredentialFactory' => __DIR__ . '/../..' . '/tools/module/login/factory/CredentialFactory.php',
         'tools\\module\\login\\logic\\CreateCredential' => __DIR__ . '/../..' . '/tools/module/login/logic/CreateCredential.php',
+        'tools\\module\\login\\logic\\SendMessage' => __DIR__ . '/../..' . '/tools/module/messages/logic/SendMessage.php',
         'tools\\module\\login\\logic\\UpdateCredential' => __DIR__ . '/../..' . '/tools/module/login/logic/UpdateCredential.php',
         'tools\\module\\login\\objects\\Credential' => __DIR__ . '/../..' . '/tools/module/login/objects/Credential.php',
         'tools\\module\\login\\repository\\CredentialRepository' => __DIR__ . '/../..' . '/tools/module/login/repository/CredentialRepository.php',
@@ -138,6 +182,7 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
         'tools\\module\\login\\service\\GoogleLoginService' => __DIR__ . '/../..' . '/tools/module/login/service/GoogleLoginService.php',
         'tools\\module\\login\\service\\LoginService' => __DIR__ . '/../..' . '/tools/module/login/service/LoginService.php',
         'tools\\module\\login\\service\\LogoutService' => __DIR__ . '/../..' . '/tools/module/login/service/LogoutService.php',
+        'tools\\module\\login\\service\\SendMessageService' => __DIR__ . '/../..' . '/tools/module/messages/service/SendMessageService.php',
         'tools\\module\\login\\service\\SendRecoverEmailService' => __DIR__ . '/../..' . '/tools/module/login/service/SendRecoverEmailService.php',
         'tools\\module\\login\\service\\UpdateCredentialByTokenService' => __DIR__ . '/../..' . '/tools/module/login/service/UpdateCredentialByTokenService.php',
         'tools\\module\\login\\service\\UpdateCredentialService' => __DIR__ . '/../..' . '/tools/module/login/service/UpdateCredentialService.php',
@@ -161,7 +206,8 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
         'tools\\security\\Setup' => __DIR__ . '/../..' . '/tools/security/Setup.php',
         'tools\\security\\ValidatePassword' => __DIR__ . '/../..' . '/tools/security/ValidatePassword.php',
         'tools\\stripe\\StripeCustomer' => __DIR__ . '/../..' . '/tools/stripe/StripeCustomer.php',
-        'tools\\stripe\\StripePayment' => __DIR__ . '/../..' . '/tools/stripe/StripePayment.php',
+        'tools\\stripe\\StripePayment' => __DIR__ . '/../..' . '/tools/stripe/StripeConnect.php',
+        'tools\\stripe\\StripeRefund' => __DIR__ . '/../..' . '/tools/stripe/StripeRefund.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
