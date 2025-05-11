@@ -17,9 +17,9 @@ class UpdateCredentialByTokenService extends Service{
     }
     
     public function process($id, $password, $refreshToken){
-        Assert::validUuid($id, 'User not found.');
-        Assert::validPassword($password, 'Incorrect password.');
-        Assert::validToken($refreshToken, 'Invalid token.');
+        Assert::validUuid($id, 'No matching user account found.');
+        Assert::validPassword($password, 'The password you entered is incorrect.');
+        Assert::validToken($refreshToken, 'The provided token is invalid or has expired.');
 
         $userId = new Id();
         $userId->set($id);

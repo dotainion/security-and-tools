@@ -9,10 +9,10 @@ trait PasswordTrait
 {
     public function assertSignInPass(Password $hasPassword, string $plainPassword): bool
     {
-        Assert::validPassword($plainPassword, 'Invalid password.');
+        Assert::validPassword($plainPassword, 'The password you entered is incorrect.');
         $isValid = password_verify($plainPassword, $hasPassword->toString());
         if(!$isValid){
-            throw new NotAuthenticatedException('Invalid password.');
+            throw new NotAuthenticatedException('The password you entered is incorrect.');
         }
         return true;
     }

@@ -73,7 +73,7 @@ class Assert extends Repository{
         return true;
     }
 
-    public static function validPassword($password, string $message = 'Invalid Password.', bool $useRequirements=true):bool{
+    public static function validPassword($password, string $message = 'The password you entered is incorrect.', bool $useRequirements=true):bool{
         $validate = new ValidatePassword();
         $validate->validate($password);
         if($validate->chain()->hasError()){
@@ -85,7 +85,7 @@ class Assert extends Repository{
     }
 
     public static function validPasswordMatch($password, $confirmPassword, string $message = 'Password Mismatch.'):bool{
-        Assert::validPassword($password, 'Invalid Password.');
+        Assert::validPassword($password, 'The password you entered is incorrect.');
         Assert::validPassword($confirmPassword, 'Invalid confirm Password.');
         if($password !== $confirmPassword){
             throw new InvalidArgumentException($message);

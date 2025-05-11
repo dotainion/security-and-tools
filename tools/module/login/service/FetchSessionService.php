@@ -12,7 +12,7 @@ class FetchSessionService extends Service{
     }
     
     public function process($token){
-        Assert::validToken($token, 'Invalid token');
+        Assert::validToken($token, 'The provided token is invalid or has expired.');
 
         if($this->security()->authenticated(new Token($token))){
             return $this->setOutput($this->security()->user());

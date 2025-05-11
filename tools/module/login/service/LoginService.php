@@ -18,7 +18,7 @@ class LoginService extends Service{
     }
     
     public function process($email, $phone, $password){
-        Assert::validPassword($password, 'Invalid password', false);
+        Assert::validPassword($password, 'The password you entered is incorrect.', false);
         
         if(!$email && !$phone){
             throw new InvalidArgumentException('Invalid email or phone number.');

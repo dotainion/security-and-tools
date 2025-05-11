@@ -5,8 +5,12 @@ use tools\infrastructure\Id;
 use tools\infrastructure\Password;
 use tools\infrastructure\Token;
 use tools\module\login\repository\CredentialRepository;
+use tools\security\PasswordTrait;
 
 class UpdateCredential{
+    
+    use PasswordTrait;
+
     protected CredentialRepository $repo;
 
     public function __construct(){
@@ -14,12 +18,11 @@ class UpdateCredential{
     }
 
     public function updatecredential(Id $id, Password $currentPassword, Password $password):void{
-        $collector = $this->repo->listHasCredential([
-            'id' => $id,
-            'password' => $currentPassword->toHash()
-        ]);
-        $collector->assertHasItem('Invalid password.');
-        $this->repo->editPassword($id, $currentPassword, $password);
+        $collector = $this->repo->listHasCredential(['id' => $id]);
+        $collector->assertHasItem('No matching user record was found.');
+        $security = $collector->first();
+        $this->assertSignInPass($security->password(), $currentPassword->toString());
+        $this->repo->editPassword($id, $password);
     }
 
     public function updateByToken(Id $id, Password $password, Token $token):void{

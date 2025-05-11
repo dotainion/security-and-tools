@@ -23,8 +23,8 @@ class SendRecoverEmailService extends Service{
     }
     
     public function process($email, $userId){
-        Assert::validEmail($email, 'Invalid email.');
-        Assert::validUuid($userId, 'User not found.');
+        Assert::validEmail($email, 'The email address entered is not valid.');
+        Assert::validUuid($userId, 'No matching user account found.');
 
         $credential = $this->factory->mapResult([
             'id' => $userId,

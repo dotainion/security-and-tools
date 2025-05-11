@@ -29,12 +29,11 @@ class CredentialRepository extends Repository{
         $this->execute();
     }
     
-    public function editPassword(Id $id, Password $password, Password $newPassword):void{
+    public function editPassword(Id $id, Password $password):void{
         $this->update('credential')        
-            ->column('password', $newPassword->toHash())
+            ->column('password', $password->toHash())
             ->where()
-            ->eq('id', $this->uuid($id))
-            ->eq('password', $password->toHash());
+            ->eq('id', $this->uuid($id));
         $this->execute();
     }
     

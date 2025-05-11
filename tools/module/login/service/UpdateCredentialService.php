@@ -16,9 +16,9 @@ class UpdateCredentialService extends Service{
     }
     
     public function process($id, $password, $currentPassword){
-        Assert::validUuid($id, 'Invalid user');
-        Assert::validPassword($password, 'Invalid password');
-        Assert::validPassword($currentPassword, 'Invalid password');
+        Assert::validUuid($id, 'No matching user account found.');
+        Assert::validPassword($password, 'The password you entered is incorrect.');
+        Assert::validPassword($currentPassword, 'The current password you entered is incorrect.');
 
         $userId = new Id();
         $userId->set($id);

@@ -19,7 +19,7 @@ class CreateGoogleCredentialService extends Service{
     }
     
     public function process($id){
-        Assert::validUuid($id, 'User not found.');
+        Assert::validUuid($id, 'No matching user account found.');
         
         $idObj = new Id();
         $idObj->set($id);

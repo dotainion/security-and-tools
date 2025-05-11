@@ -20,8 +20,8 @@ class CreateCredentialService extends Service{
     }
     
     public function process($id, $password){
-        Assert::validUuid($id, 'User not found.');
-        Assert::validPassword($password, 'Invalid password.');
+        Assert::validUuid($id, 'No matching user account found.');
+        Assert::validPassword($password, '.The password you entered is incorrect.');
         
         $idObj = new Id();
         $idObj->set($id);
