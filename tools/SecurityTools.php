@@ -8,6 +8,7 @@ use tools\module\login\service\FetchSessionService;
 use tools\module\login\service\GoogleLoginService;
 use tools\module\login\service\LoginService;
 use tools\module\login\service\LogoutService;
+use tools\module\login\service\SendMessageService;
 use tools\module\login\service\SendRecoverEmailService;
 use tools\module\login\service\UpdateCredentialByTokenService;
 use tools\module\login\service\UpdateCredentialService;
@@ -51,6 +52,10 @@ class SecurityTools{
 
     public function updateCredential(string $id, string $password, string $currentPassword):Service{
         return (new UpdateCredentialService())->process($id, $password, $currentPassword);
+    }
+
+    public function pusherMessanger(string $channel, string $event, string $message):Service{
+        return (new SendMessageService())->process($channel, $event, $message);
     }
 }
 
