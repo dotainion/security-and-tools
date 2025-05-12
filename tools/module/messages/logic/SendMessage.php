@@ -5,8 +5,10 @@ use InvalidArgumentException;
 use Pusher\Pusher;
 use tools\infrastructure\Assert;
 use tools\infrastructure\Env;
+use tools\infrastructure\IObjects;
+use tools\infrastructure\Service;
 
-class SendMessage{
+class SendMessage extends Service{
     protected Pusher $pusher;
 
     public function __construct(){
@@ -30,10 +32,10 @@ class SendMessage{
         return true;
     }
 
-    public function send(string $channel, string $event, string $message):void{
+    public function send(string $channel, string $event, IObjects $message):void{
         if (empty($message)) {
             throw new InvalidArgumentException('Message not provided.');
         }
-        $this->pusher->trigger($channel, $event, ['message' => $message]);
+        $this->pusher->trigger($channel, $event, $this->toJson($message));
     }
 }

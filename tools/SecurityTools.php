@@ -1,6 +1,7 @@
 <?php
 namespace tools;
 
+use tools\infrastructure\IObjects;
 use tools\infrastructure\Service;
 use tools\module\login\service\CreateCredentialService;
 use tools\module\login\service\CreateGoogleCredentialService;
@@ -54,7 +55,7 @@ class SecurityTools{
         return (new UpdateCredentialService())->process($id, $password, $currentPassword);
     }
 
-    public function pusherMessanger(string $channel, string $event, string $message):Service{
+    public function pusherMessanger(string $channel, string $event, IObjects $message):Service{
         return (new SendMessageService())->process($channel, $event, $message);
     }
 }
