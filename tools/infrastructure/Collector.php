@@ -70,7 +70,16 @@ class Collector{
     public function filter($attr, $value):Collector{
         $collector = new Collector();
         foreach($this->list() as $item){
-            if($item->$attr() === $value){
+            $content = $item->$attr();
+            if(
+                !is_null($value) && 
+                !is_bool($value) && 
+                !is_string($value) && 
+                method_exists($value, 'toString')
+            ){
+                $content = $item->$attr()->toString();
+            }
+            if($content === $value){
                 $collector->add($item);
             }
         }
