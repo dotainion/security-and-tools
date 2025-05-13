@@ -72,10 +72,10 @@ class Collector{
         foreach($this->list() as $item){
             $content = $item->$attr();
             if(
-                !is_null($value) && 
-                !is_bool($value) && 
-                !is_string($value) && 
-                method_exists($value, 'toString')
+                !is_null($content) && 
+                !is_bool($content) && 
+                !is_string($content) && 
+                method_exists($content, 'toString')
             ){
                 $content = $item->$attr()->toString();
             }
