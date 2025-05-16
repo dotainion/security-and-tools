@@ -24,6 +24,10 @@ class Repository extends SqlRepository{
 	public function permissionOff():void{
 		$this->permissionOff = true;
 	}
+
+	public function request(): Request{
+		return new Request();
+	}
 }
 
 ?>
