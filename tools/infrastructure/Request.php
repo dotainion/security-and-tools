@@ -50,4 +50,8 @@ class Request{
     public function request(){
         return $this->request;
     }
+
+    public function pagination():Pagination{
+        return new Pagination($this->get('limit'), $this->get('offset'));
+    }
 }
