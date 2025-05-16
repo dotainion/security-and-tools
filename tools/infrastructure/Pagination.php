@@ -22,4 +22,11 @@ class Pagination{
     public function offset():?int{
         return $this->offset;
     }
+
+    public function get():array{
+        return [
+            'limit' => $this->limit(), 
+            'offset' => $this->offset()
+        ];
+    }
 }
