@@ -3,7 +3,7 @@
         'name' => 'dotainion/security-tools',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '1856422ebc24f7c337e2029595349ba83316e57b',
+        'reference' => '794212c35c60cd526126c20544e38bdc6c79d9d8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'dotainion/security-tools' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '1856422ebc24f7c337e2029595349ba83316e57b',
+            'reference' => '794212c35c60cd526126c20544e38bdc6c79d9d8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
