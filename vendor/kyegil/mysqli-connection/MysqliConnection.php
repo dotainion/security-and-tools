@@ -7,6 +7,7 @@ namespace Kyegil\MysqliConnection;
 
 use Exception;
 use mysqli;
+use mysqli_result;
 use Psr\Log\LoggerInterface;
 use stdClass;
 
@@ -19,17 +20,17 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
      * @var string[]
      * @see https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html
      */
-    public static $logicalOperators = ['and', 'or', 'xor', 'not', '&&', '||', '!'];
+    public static array $logicalOperators = ['and', 'or', 'xor', 'not', '&&', '||', '!'];
 
     /**
      * The prefix will be added to all table names, and should end with underscore '_' if used
      *
      * @var string
      */
-    public $table_prefix = '';
+    public string $table_prefix = '';
 
     /** @var LoggerInterface */
-    protected $logger;
+    protected ?LoggerInterface $logger = null;
 
     /**
      * MysqliConnection constructor.
@@ -48,7 +49,7 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
         $this->logQuery('MysqliConnection initialised');
     }
 
-    public function query($query, $result_mode = null)
+    public function query(string $query, int $result_mode = MYSQLI_STORE_RESULT): mysqli_result|bool
     {
         $this->logQuery($query);
         return parent::query($query, $result_mode);
@@ -59,10 +60,9 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
      *
      * Format array of field names as string list
      *
-     * @param string|array $fields array of field names
+     * @param array $fields array of field names
      * @return string sql-syntax
-     * @throws Exception
-    */
+     */
     public function listFields(array $fields): string
     {
         $set = [];
@@ -82,7 +82,8 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
      * @return string
      * @throws Exception
      */
-    public function prepareSelectQueryFromConfig(object $config, array &$bindValues = []) {
+    public function prepareSelectQueryFromConfig(object $config, array &$bindValues = []): string
+    {
         settype($config->distinct,  'boolean');
         settype($config->flat,   'boolean');
 
@@ -107,7 +108,7 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
             throw new Exception('No source parameter given');
         }
 
-        $sql = 'SELECT '
+        return 'SELECT '
             . ($config->distinct ? 'DISTINCT ' : '')
             . ($config->fields ? "{$this->listFields($config->fields)}\n" : "*\n")
             . "FROM {$config->source}\n"
@@ -115,16 +116,14 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
             . ($config->groupfields ? "GROUP BY {$this->listFields($config->groupfields)}\n" : "")
             . ($config->having ? "HAVING {$this->prepareWhereQuery('and', (array)$config->having, $bindValues)}\n" : "")
             . ($config->orderfields ? "ORDER BY {$config->orderfields}\n" : "")
-            . ($config->limit ? "LIMIT {$config->limit}\n" : "")
-        ;
-        return $sql;
+            . ($config->limit ? "LIMIT {$config->limit}\n" : "");
     }
 
     /**
      * @param array|object $config
      * * (boolean) flat Return the one-field result as a one-dimensional array
      * * (boolean) returnQuery Returns the ready-build query as the sql property
-     * * (string) sql A fully prepared SQL SELECT query. This will override all of the following config options:
+     * * (string) sql A fully prepared SQL SELECT query. This will override all the following config options:
      * * (string[]|array[]) fields All the required field names provided as a string or as `alias` => `fieldname`
      * * (string[]) groupfields All the fields included in the GROUP BY statement
      * * (string[]) orderfields All the fields included in the ORDER BY statement
@@ -137,10 +136,11 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
      *
      * @return object
      * * (boolean) success True if the query was successful
-     * * (object|string[]) data The result data. If 'flat' was set to true, only the first columns are returned as a one-dimensional array. Otherwise an array of objects will be returned
+     * * (object|string[]) data The result data. If 'flat' was set to true, only the first columns are returned as a one-dimensional array. Otherwise, an array of objects will be returned
      * * (int) totalRows The number of valid results as if LIMIT was not provided
      * * (string) sql If 'returnQuery' was set to true, then the query used to create the result will be returned here.
      * * (string) msg Any error messages if the query was unsuccessful.
+     * @throws Exception
      */
     public function select($config): stdClass {
         /** @var object $config */
@@ -261,6 +261,7 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
      * * (boolean) success True if the query was successful
      * * (string) sql If 'returnQuery' was set to true, then the query used to create the result will be returned here.
      * * (string) msg Any error messages if the query was unsuccessful.
+     * @throws Exception
      */
     public function save($config): stdClass
     {
@@ -404,9 +405,7 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
     public function logQuery(string $sql, array $context = []): MysqliConnection
     {
         $logger = $this->getLogger();
-        if ($logger) {
-            $logger->debug($sql, $context);
-        }
+        $logger?->debug($sql, $context);
         return $this;
     }
 
@@ -444,15 +443,15 @@ class MysqliConnection extends mysqli implements MysqliConnectionInterface {
      * as the element key
      *
      * @param string $expression
-     * @param string|string[]|array[] $value
+     * @param string|array[]|string[]|null|bool $value
      * @param array $bindValues
      * @return string
      * @throws Exception
      */
     public function prepareWhereQuery(
-        string $expression,
-               $value,
-        array &$bindValues
+        string       $expression,
+        $value,
+        array        &$bindValues
     ): string
     {
         /*
