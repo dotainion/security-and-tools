@@ -14,7 +14,7 @@ class Session{
 
     public static function user():IUser{
         if(!isset($_SESSION[self::key()])){
-            throw new NotAuthenticatedException('You are not authenticated.');
+            throw new NotAuthenticatedException('Access denied: Your are not authenticated.');
         }
         return self::session()->user();
     }
