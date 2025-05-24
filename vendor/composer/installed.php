@@ -3,7 +3,7 @@
         'name' => 'dotainion/security-tools',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '48e1d47b36bd841986ed364fe69cb7e5bff08fab',
+        'reference' => 'b0a2691cd8b666b946793a31368e28b93edc9e86',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'dotainion/query-permission' => array(
             'pretty_version' => '1.0.0',
             'version' => '1.0.0.0',
-            'reference' => '3c6ac401abd2c9011bef6a532ad48305944b9a90',
+            'reference' => '3d1fe6eabf3341755441f6af5995a7aab2d1193f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../dotainion/query-permission',
             'aliases' => array(),
@@ -31,7 +31,7 @@
         'dotainion/security-tools' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '48e1d47b36bd841986ed364fe69cb7e5bff08fab',
+            'reference' => 'b0a2691cd8b666b946793a31368e28b93edc9e86',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
