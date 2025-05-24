@@ -70,12 +70,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotainion/query-permission.git",
-                "reference": "a03812b75159be85977a4ce012947267c0abca09"
+                "reference": "3dc4d7f14fe7f25e154ef9cb47a8bab4e0bcc861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotainion/query-permission/zipball/a03812b75159be85977a4ce012947267c0abca09",
-                "reference": "a03812b75159be85977a4ce012947267c0abca09",
+                "url": "https://api.github.com/repos/dotainion/query-permission/zipball/3dc4d7f14fe7f25e154ef9cb47a8bab4e0bcc861",
+                "reference": "3dc4d7f14fe7f25e154ef9cb47a8bab4e0bcc861",
                 "shasum": ""
             },
             "require": {
@@ -83,7 +83,7 @@
                 "kyegil/mysqli-connection": "^1.3",
                 "ramsey/uuid": "^4.2"
             },
-            "time": "2025-05-24T05:38:45+00:00",
+            "time": "2025-05-24T08:24:17+00:00",
             "type": "library",
             "installation-source": "source",
             "autoload": {
