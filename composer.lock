@@ -72,12 +72,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotainion/query-permission.git",
-                "reference": "3dc4d7f14fe7f25e154ef9cb47a8bab4e0bcc861"
+                "reference": "3c6ac401abd2c9011bef6a532ad48305944b9a90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotainion/query-permission/zipball/3dc4d7f14fe7f25e154ef9cb47a8bab4e0bcc861",
-                "reference": "3dc4d7f14fe7f25e154ef9cb47a8bab4e0bcc861",
+                "url": "https://api.github.com/repos/dotainion/query-permission/zipball/3c6ac401abd2c9011bef6a532ad48305944b9a90",
+                "reference": "3c6ac401abd2c9011bef6a532ad48305944b9a90",
                 "shasum": ""
             },
             "require": {
@@ -103,7 +103,7 @@
                 "issues": "https://github.com/dotainion/query-permission/issues",
                 "source": "https://github.com/dotainion/query-permission/tree/v1.0.0"
             },
-            "time": "2025-05-24T08:24:17+00:00"
+            "time": "2025-05-24T08:58:05+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
