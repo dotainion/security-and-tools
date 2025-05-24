@@ -58,6 +58,8 @@ class CredentialRepository extends Repository{
     public function listHasCredential(array $where):Collector{
         $this->select('credential')
             ->join()->inner('user', 'id', 'credential', 'id')
+            ->cursor()->join()->inner('role', 'userId', 'user', 'id')
+            ->cursor()->join()->inner('rolePermission', 'userId', 'user', 'id')
             ->cursor()->where()->eq('hide', 0, 'user');
 
         if(isset($where['id'])){
