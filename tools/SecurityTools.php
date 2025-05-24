@@ -1,6 +1,8 @@
 <?php
 namespace tools;
 
+use permission\role\service\ListRoleService;
+use permission\role\service\SetRoleService;
 use tools\infrastructure\IObjects;
 use tools\infrastructure\Service;
 use tools\module\login\service\CreateCredentialService;
@@ -57,6 +59,14 @@ class SecurityTools{
 
     public function pusherMessanger(string $channel, string $event, IObjects $message):Service{
         return (new SendMessageService())->process($channel, $event, $message);
+    }
+
+    public function setRole(string $userId, string $label, bool $read, bool $write, bool $edit, bool $delete):Service{
+        return (new SetRoleService())->process($userId, $label, $read, $write, $edit, $delete);
+    }
+
+    public function listRoles(string $userId):Service{
+        return (new ListRoleService())->process($userId);
     }
 }
 
