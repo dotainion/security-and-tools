@@ -33,9 +33,18 @@ class SecurityRepository extends Repository{
 
     public function listSecurity(array $where = []):Collector{
         $this->select(Setup::userTableName())
-            ->join()->inner('credential', 'id', 'user', 'id')
-            ->cursor()->join()->inner('role', 'userId', 'user', 'id')
+            ->join()->inner('credential', 'id', 'user', 'id');
+
+        if(Setup::jointSecurityTableWithPermission()){
+            $this->join()->inner('role', 'userId', 'user', 'id')
             ->cursor()->join()->inner('rolePermission', 'userId', 'user', 'id');
+        }
+        if(Setup::jointSecurityTableWithPermission()){
+            $this->join()->inner('role', 'userId', 'user', 'id')
+            ->cursor()->join()->inner('rolePermission', 'userId', 'user', 'id');
+        }
+
+        Setup::fireRepoAfterTableSetObsover($this);
             
         if(isset($where['id'])){
             $this->where()->eq('id', $this->uuid($where['id']));
