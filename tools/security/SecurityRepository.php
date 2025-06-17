@@ -39,10 +39,6 @@ class SecurityRepository extends Repository{
             $this->join()->inner('role', 'userId', 'user', 'id')
             ->cursor()->join()->inner('rolePermission', 'userId', 'user', 'id');
         }
-        if(Setup::jointSecurityTableWithPermission()){
-            $this->join()->inner('role', 'userId', 'user', 'id')
-            ->cursor()->join()->inner('rolePermission', 'userId', 'user', 'id');
-        }
 
         Setup::fireRepoAfterTableSetObsover($this);
             
