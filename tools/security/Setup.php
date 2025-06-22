@@ -9,6 +9,7 @@ class Setup{
     protected static string $userTableName = 'user';
     protected static array $repoAfterTableSetObsovers = [];
     protected static bool $jointSecurityTableWithPermission = true;
+    protected static array $repoExecuteObsover = [];
 
     public static function jointSecurityTableWithPermission():bool{
         return self::$jointSecurityTableWithPermission;
@@ -40,6 +41,16 @@ class Setup{
 
     public static function fireRepoAfterTableSetObsover($repo):void{
         foreach(self::$repoAfterTableSetObsovers as $callback){
+            $callback($repo);
+        }
+    }
+
+    public static function repoExecuteObsover(callable $callback):void{
+        self::$repoExecuteObsover[] = $callback;
+    }
+
+    public static function fireRepoExecuteObsover($repo):void{
+        foreach(self::$repoExecuteObsover as $callback){
             $callback($repo);
         }
     }
