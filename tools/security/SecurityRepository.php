@@ -9,11 +9,18 @@ use tools\infrastructure\Token;
 
 class SecurityRepository extends Repository{
     protected SecurityFactory $factory;
+    protected ?string $obsoverIdentifier = null;
 
     public function __construct(){
         $this->permissionOff();
         parent::__construct();
         $this->factory = new SecurityFactory();
+    }
+
+    public function __destruct() {
+        if($this->obsoverIdentifier !== null){
+            Setup::unsubscribeObsover($this->obsoverIdentifier);
+        }
     }
     
     public function updateToken(Id $id, Token $token, DateHelper $expire):void{

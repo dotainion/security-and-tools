@@ -2,6 +2,7 @@
 namespace tools\security;
 
 use Exception;
+use tools\infrastructure\Id;
 use tools\infrastructure\IFactory;
 
 class Setup{
@@ -10,6 +11,7 @@ class Setup{
     protected static array $repoAfterTableSetObsovers = [];
     protected static bool $jointSecurityTableWithPermission = true;
     protected static array $repoExecuteObsover = [];
+    protected static array $fireRepoSetObsover = [];
 
     public static function jointSecurityTableWithPermission():bool{
         return self::$jointSecurityTableWithPermission;
@@ -35,8 +37,10 @@ class Setup{
         return self::$userTableName;
     }
 
-    public static function repoAfterTableSetObsover(callable $callback):void{
-        self::$repoAfterTableSetObsovers[] = $callback;
+    public static function repoAfterTableSetObsover(callable $callback):string{
+        $uniqueIdentifier = (new Id())->new()->toString();
+        self::$repoAfterTableSetObsovers[$uniqueIdentifier] = $callback;
+        return $uniqueIdentifier;
     }
 
     public static function fireRepoAfterTableSetObsover($repo):void{
@@ -45,14 +49,34 @@ class Setup{
         }
     }
 
-    public static function repoExecuteObsover(callable $callback):void{
-        self::$repoExecuteObsover[] = $callback;
+    public static function repoExecuteObsover(callable $callback):string{
+        $uniqueIdentifier = (new Id())->new()->toString();
+        self::$repoExecuteObsover[$uniqueIdentifier] = $callback;
+        return $uniqueIdentifier;
     }
 
     public static function fireRepoExecuteObsover($repo):void{
         foreach(self::$repoExecuteObsover as $callback){
             $callback($repo);
         }
+    }
+
+    public static function repoSetObsover($cmd, callable $callback):string{
+        $uniqueIdentifier = (new Id())->new()->toString();
+        self::$fireRepoSetObsover[$uniqueIdentifier][$cmd] = $callback;
+        return $uniqueIdentifier;
+    }
+
+    public static function fireRepoSetObsover(string $cmd, $repo):void{
+        foreach(array_values(self::$fireRepoSetObsover) as $key => $callback){
+            ($cmd === $key) && $callback($repo);
+        }
+    }
+
+    public static function unsubscribeObsover(string $uniqueIdentifier):void{
+        unset(self::$repoAfterTableSetObsovers[$uniqueIdentifier]);
+        unset(self::$repoExecuteObsover[$uniqueIdentifier]);
+        unset(self::$fireRepoSetObsover[$uniqueIdentifier]);
     }
 
     public static function factory():IFactory{
