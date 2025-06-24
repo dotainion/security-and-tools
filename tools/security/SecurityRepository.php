@@ -47,7 +47,7 @@ class SecurityRepository extends Repository{
             ->cursor()->join()->inner('rolePermission', 'userId', 'user', 'id');
         }
 
-        Setup::fireRepoAfterTableSetObsover($this);
+        $this->obsoverIdentifier = Setup::fireRepoAfterTableSetObsover($this);
             
         if(isset($where['id'])){
             $this->where()->eq('id', $this->uuid($where['id']));
