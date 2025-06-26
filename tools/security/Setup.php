@@ -39,44 +39,56 @@ class Setup{
 
     public static function repoAfterTableSetObsover(callable $callback):string{
         $uniqueIdentifier = (new Id())->new()->toString();
-        self::$repoAfterTableSetObsovers[$uniqueIdentifier] = $callback;
+        self::$repoAfterTableSetObsovers[] = ['id' => $uniqueIdentifier,'fx' => $callback];
         return $uniqueIdentifier;
     }
 
     public static function fireRepoAfterTableSetObsover($repo):void{
-        foreach(self::$repoAfterTableSetObsovers as $callback){
-            $callback($repo);
+        foreach(self::$repoAfterTableSetObsovers as $opt){
+            $opt['fx']($repo);
         }
     }
 
     public static function repoExecuteObsover(callable $callback):string{
         $uniqueIdentifier = (new Id())->new()->toString();
-        self::$repoExecuteObsover[$uniqueIdentifier] = $callback;
+        self::$repoExecuteObsover[] = ['id' => $uniqueIdentifier,'fx' => $callback];
         return $uniqueIdentifier;
     }
 
     public static function fireRepoExecuteObsover($repo):void{
-        foreach(self::$repoExecuteObsover as $callback){
-            $callback($repo);
+        foreach(self::$repoExecuteObsover as $opt){
+            $opt['fx']($repo);
         }
     }
 
     public static function repoSetObsover($cmd, callable $callback):string{
         $uniqueIdentifier = (new Id())->new()->toString();
-        self::$fireRepoSetObsover[$uniqueIdentifier][$cmd] = $callback;
+        self::$fireRepoSetObsover[] = ['id' => $uniqueIdentifier,'fx' => $callback, 'cmd' => $cmd];
         return $uniqueIdentifier;
     }
 
     public static function fireRepoSetObsover(string $cmd, $repo):void{
-        foreach(array_values(self::$fireRepoSetObsover) as $key => $callback){
-            ($cmd === $key) && $callback($repo);
+        foreach(array_values(self::$fireRepoSetObsover) as $opt){
+            ($cmd === $opt['cmd']) && $opt['fx']($repo);
         }
     }
 
     public static function unsubscribeObsover(string $uniqueIdentifier):void{
-        unset(self::$repoAfterTableSetObsovers[$uniqueIdentifier]);
-        unset(self::$repoExecuteObsover[$uniqueIdentifier]);
-        unset(self::$fireRepoSetObsover[$uniqueIdentifier]);
+        foreach(self::$repoAfterTableSetObsovers as $i => $opt){
+            if($uniqueIdentifier === $opt['id']){
+                unset(self::$repoAfterTableSetObsovers[$i]);
+            }
+        }
+        foreach(self::$repoExecuteObsover as $i => $opt){
+            if($uniqueIdentifier === $opt['id']){
+                unset(self::$repoExecuteObsover[$i]);
+            }
+        }
+        foreach(self::$fireRepoSetObsover as $i => $opt){
+            if($uniqueIdentifier === $opt['id']){
+                unset(self::$fireRepoSetObsover[$i]);
+            }
+        }
     }
 
     public static function factory():IFactory{
