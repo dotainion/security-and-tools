@@ -49,19 +49,19 @@ class Setup{
         }
     }
 
-    public static function repoExecuteObsover(callable $callback):string{
+    public static function repoExecuteObsover(string $tableName, callable $callback):string{
         $uniqueIdentifier = (new Id())->new()->toString();
-        self::$repoExecuteObsover[] = ['id' => $uniqueIdentifier,'fx' => $callback];
+        self::$repoExecuteObsover[] = ['id' => $uniqueIdentifier,'fx' => $callback, 'cmd' => $tableName];
         return $uniqueIdentifier;
     }
 
-    public static function fireRepoExecuteObsover($repo):void{
+    public static function fireRepoExecuteObsover(string $tableName, $repo):void{
         foreach(self::$repoExecuteObsover as $opt){
-            $opt['fx']($repo);
+            ($tableName === $opt['cmd']) && $opt['fx']($repo);
         }
     }
 
-    public static function repoSetObsover($cmd, callable $callback):string{
+    public static function repoSetObsover(string $cmd, callable $callback):string{
         $uniqueIdentifier = (new Id())->new()->toString();
         self::$fireRepoSetObsover[] = ['id' => $uniqueIdentifier,'fx' => $callback, 'cmd' => $cmd];
         return $uniqueIdentifier;
