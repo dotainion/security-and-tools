@@ -5,6 +5,7 @@ use permission\role\service\ListRoleService;
 use permission\role\service\SetRoleService;
 use tools\infrastructure\IObjects;
 use tools\infrastructure\Service;
+use tools\module\login\service\AuthVerificationService;
 use tools\module\login\service\CreateCredentialService;
 use tools\module\login\service\CreateGoogleCredentialService;
 use tools\module\login\service\FetchSessionService;
@@ -35,6 +36,10 @@ class SecurityTools{
 
     public function googleLogin(string $accessToken):Service{
         return (new GoogleLoginService())->process($accessToken);
+    }
+
+    public function authVerification(string $email, string $phone, string $password):Service{
+        return (new AuthVerificationService())->process($email, $phone, $password);
     }
 
     public function signIn(string $email, string $phone, string $password):Service{

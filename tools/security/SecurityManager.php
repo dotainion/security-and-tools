@@ -33,13 +33,17 @@ class SecurityManager{
         return $credential;
     }
 
-    public function login(IIdentifier $identifier, Password $password):void{
+    public function verification(IIdentifier $identifier, Password $password):ICredential{
         $collector = $this->login->login($identifier);
         if(!$collector->first()->hasPassword()){
             throw new NotAuthenticatedException('This account do not have login access.');
         }
         $this->assertSignInPass($collector->first()->password(), $password);
-        $credential = $collector->first();
+        return $collector->first();
+    }
+
+    public function login(IIdentifier $identifier, Password $password):void{
+        $credential = $this->verification($identifier, $password);
         $credential = $this->_updateAccessToken($credential);
         $this->startSession($credential);
     }

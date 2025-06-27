@@ -9,7 +9,7 @@ use tools\infrastructure\Phone;
 use tools\infrastructure\Service;
 use tools\security\SecurityManager;
 
-class LoginService extends Service{
+class AuthVerificationService extends Service{
     protected SecurityManager $security;
 
     public function __construct(){
@@ -26,8 +26,8 @@ class LoginService extends Service{
 
         $identifier = $email ? new Email($email) : new Phone($phone);
         $password = new Password($password);
-        $this->security->login($identifier, $password);
+        $security = $this->security->verification($identifier, $password);
         
-        return $this->setOutput($this->security->user());
+        return $this->setOutput($security->user());
     }
 }

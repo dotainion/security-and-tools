@@ -5,8 +5,7 @@ namespace tools\infrastructure;
 class Email implements IIdentifier{
     protected ?string $email = null;
 
-    public function __construct(?string $email=null)
-    {
+    public function __construct(?string $email=null){
         ($email !== null) && $this->set($email);
     }
 

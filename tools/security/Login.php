@@ -20,7 +20,7 @@ class Login{
         $collector = $this->repo->listSecurity([
             'phoneNumber' => $identifier->toString()
         ]);
-        if(!$collector->hasItem()){
+        if($collector->isEmpty()){
             $collector = $this->repo->listSecurity([
                 'email' => $identifier->toString()
             ]);

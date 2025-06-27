@@ -5,6 +5,10 @@ namespace tools\infrastructure;
 class Phone implements IIdentifier{
     protected ?string $phone = null;
 
+    public function __construct(?string $phone=null){
+        ($phone !== null) && $this->set($phone);
+    }
+
     final public function __toString():string{
         return $this->toString();
     }

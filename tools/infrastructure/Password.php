@@ -9,6 +9,10 @@ class Password{
     const CONTROL_OPTION = 'AES-128-ECB';
     const CONTROL_KEY = '26dc161e-c590-40ca-a341-2ea107d9468f-35eb45ab-3758-4624-a977-3bb94400ed4c';
 
+    public function __construct(?string $password=null){
+        ($password !== null) && $this->set($password);
+    }
+
     public function __toString():string{
         return $this->toString();
     }
