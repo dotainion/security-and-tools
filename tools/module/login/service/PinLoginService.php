@@ -1,6 +1,7 @@
 <?php
 namespace tools\module\login\service;
 
+use tools\infrastructure\Assert;
 use tools\infrastructure\Pin;
 use tools\infrastructure\PinPassword;
 use tools\infrastructure\Service;
@@ -15,6 +16,7 @@ class PinLoginService extends Service{
     }
     
     public function process($pin){
+        Assert::pin($pin, 'Incorrect pin.');
 
         $identifier = new Pin($pin);
         $password = new PinPassword($pin);
