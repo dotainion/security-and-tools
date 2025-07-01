@@ -113,4 +113,12 @@ class Assert extends Repository{
         }
         return true;
     }
+
+    public static function pin($pin, ?string $message = null):bool{
+        Assert::stringNotEmpty($pin, $message ?: 'Incorrect pin.');
+        Assert::positiveNumber($pin, $message ?: 'Incorrect pin.');
+        Assert::minNumber($pin, 4, $message ?: 'Pin number should be 4 to 6 digits.');
+        Assert::maxChar($pin, 8, $message ?: 'Pin number should be 4 to 6 digits.');
+        return true;
+    }
 }

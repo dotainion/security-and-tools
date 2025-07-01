@@ -7,6 +7,7 @@ use tools\infrastructure\exeptions\NotAuthenticatedException;
 use tools\infrastructure\Id;
 use tools\infrastructure\IIdentifier;
 use tools\infrastructure\Phone;
+use tools\infrastructure\Pin;
 use tools\infrastructure\Token;
 
 class Login{
@@ -27,8 +28,17 @@ class Login{
             if($collector->hasItem()){
                 return $collector;
             }
+            if($identifier instanceof Pin){
+                $collector = $this->repo->listSecurity([
+                    'pin' => $identifier->toString()
+                ]);
+                if($collector->hasItem()){
+                    return $collector;
+                }
+            }
             $message = 'No account exist for this email.';
             $identifier instanceof Phone && $message = 'No account exist for this phone number.';
+            $identifier instanceof Pin && $message = 'Invalid PIN.';
             throw new NotAuthenticatedException($message);
         }
         return $collector;

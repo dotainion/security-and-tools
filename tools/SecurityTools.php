@@ -8,10 +8,12 @@ use tools\infrastructure\Service;
 use tools\module\login\service\AuthVerificationService;
 use tools\module\login\service\CreateCredentialService;
 use tools\module\login\service\CreateGoogleCredentialService;
+use tools\module\login\service\CreatePinCredentialService;
 use tools\module\login\service\FetchSessionService;
 use tools\module\login\service\GoogleLoginService;
 use tools\module\login\service\LoginService;
 use tools\module\login\service\LogoutService;
+use tools\module\login\service\PinLoginService;
 use tools\module\login\service\SendMessageService;
 use tools\module\login\service\SendRecoverEmailService;
 use tools\module\login\service\UpdateCredentialByTokenService;
@@ -24,6 +26,10 @@ class SecurityTools{
 
     public function createCredential(string $id, string $password):Service{
         return (new CreateCredentialService())->process($id, $password);
+    }
+
+    public function createPinCredential(string $id, string $pin):Service{
+        return (new CreatePinCredentialService())->process($id, $pin);
     }
 
     public function createGoogleCredential(string $id):Service{
@@ -44,6 +50,10 @@ class SecurityTools{
 
     public function signIn(string $email, string $phone, string $password):Service{
         return (new LoginService())->process($email, $phone, $password);
+    }
+
+    public function pinSignIn(string $pin):Service{
+        return (new PinLoginService())->process($pin);
     }
 
     public function signOut():Service{

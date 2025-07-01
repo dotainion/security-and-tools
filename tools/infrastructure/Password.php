@@ -50,7 +50,7 @@ class Password{
 
     public function setCost(int $cost):void{
         if ($cost < 4 || $cost > 12) {
-            throw new \InvalidArgumentException('Cost must be in the range of 4-31.');
+            throw new \InvalidArgumentException('Cost must be in the range of 4-12.');
         }
         $this->cost = $cost;
     }

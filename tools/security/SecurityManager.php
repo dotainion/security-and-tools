@@ -9,6 +9,7 @@ use tools\infrastructure\ICredential;
 use tools\infrastructure\IIdentifier;
 use tools\infrastructure\IUser;
 use tools\infrastructure\Password;
+use tools\infrastructure\Pin;
 use tools\infrastructure\Token;
 
 class SecurityManager{
@@ -44,6 +45,12 @@ class SecurityManager{
 
     public function login(IIdentifier $identifier, Password $password):void{
         $credential = $this->verification($identifier, $password);
+        $credential = $this->_updateAccessToken($credential);
+        $this->startSession($credential);
+    }
+
+    public function pinSignIn(Pin $pin, Password $password):void{
+        $credential = $this->verification($pin, $password);
         $credential = $this->_updateAccessToken($credential);
         $this->startSession($credential);
     }

@@ -52,6 +52,9 @@ class SecurityRepository extends Repository{
         if(isset($where['id'])){
             $this->where()->eq('id', $this->uuid($where['id']));
         }
+        if(isset($where['pin'])){
+            $this->where()->eq('pin', $where['pin']);
+        }
         if(isset($where['email'])){
             $this->where()->eq('email', $where['email']);
         }
