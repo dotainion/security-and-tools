@@ -24,7 +24,7 @@ class SecurityFactory extends Collector{
         if(isset($record['refreshToken'])){
             $security->setRefreshToken($record['refreshToken']);
         }
-        if(isset($record['email']) || isset($record['pin'])){
+        if(isset($record['email'])){
             $security->setUser(Setup::factory()->mapResult($record));
         }
         return $security;
