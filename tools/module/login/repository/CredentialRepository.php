@@ -65,6 +65,9 @@ class CredentialRepository extends Repository{
         if(isset($where['id'])){
             $this->where()->eq('id', $this->uuid($where['id']));
         }
+        if(isset($where['pin'])){
+            $this->where()->eq('pin', $where['pin'], 'user');
+        }
         if(isset($where['password'])){
             $this->where()->eq('password', $where['password']);
         }

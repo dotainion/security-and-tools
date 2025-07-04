@@ -7,6 +7,7 @@ use tools\infrastructure\Id;
 use tools\infrastructure\IId;
 use tools\infrastructure\IUser;
 use tools\infrastructure\Password;
+use tools\infrastructure\PinPassword;
 use tools\infrastructure\Token;
 
 
@@ -15,13 +16,12 @@ class Security implements ICredential{
 	protected Token $token;
 	protected ?IUser $user = null;
 	protected ?DateHelper $expire = null;
-	protected Password $password;
+	protected Password|PinPassword $password;
 	protected ?string $refreshToken = null;
 
 	public function __construct(){
 		$this->id = new Id();
 		$this->token = new Token();
-		$this->password = new Password();
 	}
 
 	public function id():IId{
@@ -42,6 +42,10 @@ class Security implements ICredential{
 
 	public function hasPassword():bool{
 		return $this->password->hasPassword();
+	}
+
+	public function pin():PinPassword{
+		return $this->password;
 	}
 
 	public function password():Password{
@@ -74,8 +78,12 @@ class Security implements ICredential{
 		$this->expire = (new DateHelper())->set($expire);
 	}
 
+	public function setPin(string $password):void{
+		$this->password = new PinPassword($password);
+	}
+
 	public function setPassword(string $password):void{
-		$this->password->set($password);
+		$this->password = new Password($password);
 	}
 
 	public function setRefreshToken(?string $refreshToken):void{

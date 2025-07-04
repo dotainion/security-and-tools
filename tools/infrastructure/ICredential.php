@@ -5,6 +5,8 @@ namespace tools\infrastructure;
 interface ICredential{
     public function id():IId;
 
+	public function pin():PinPassword;
+
 	public function user():?IUser;
 
 	public function token():Token;

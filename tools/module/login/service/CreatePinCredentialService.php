@@ -20,17 +20,17 @@ class CreatePinCredentialService extends Service{
     }
     
     public function process($id, $pin){
+        Assert::pin($pin);
         Assert::validUuid($id, 'No matching user account found.');
-        Assert::pin($pin, '.The password you entered is incorrect.');
         
         $id = new Id($id);
-        $password = new PinPassword($pin);
+        $pin = new PinPassword($pin);
 
         $credential = $this->factory->mapResult([
             'id' => $id->toString(),
             'hide' => false,
             'token' => (new Token())->new()->toString(),
-            'password' => $password->toString(),
+            'pin' => $pin->toString(),
         ]);
 
         $this->credential->create($credential);

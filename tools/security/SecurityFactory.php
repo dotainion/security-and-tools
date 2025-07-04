@@ -12,6 +12,9 @@ class SecurityFactory extends Collector{
         $security = new Security();
         $security->setId($this->uuid($record['id']));
         $security->setExpire($record['expire']);
+        if(isset($record['pin'])){
+            $security->setPin($record['pin']);
+        }
         if(isset($record['password'])){
             $security->setPassword($record['password']);
         }
