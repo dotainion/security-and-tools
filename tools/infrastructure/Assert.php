@@ -122,4 +122,11 @@ class Assert extends Repository{
         Assert::maxChar($pin, 8, $message ?: 'Pin number should be 4 to 6 digits.');
         return true;
     }
+
+    public static function isBoolTrue($state, $message = 'Must be a positive boolean value.'):bool{
+        if($state !== true){
+            throw new InvalidArgumentException($message);
+        }
+        return true;
+    }
 }
