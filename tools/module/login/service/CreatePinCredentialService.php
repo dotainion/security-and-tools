@@ -7,16 +7,16 @@ use tools\infrastructure\PinPassword;
 use tools\infrastructure\Service;
 use tools\infrastructure\Token;
 use tools\module\login\factory\CredentialFactory;
-use tools\module\login\logic\CreateCredential;
+use tools\module\login\logic\CreatePinCredential;
 
 class CreatePinCredentialService extends Service{
     protected CredentialFactory $factory;
-    protected CreateCredential $credential;
+    protected CreatePinCredential $credential;
 
     public function __construct(){
         parent::__construct(false);
         $this->factory = new CredentialFactory();
-        $this->credential = new CreateCredential();
+        $this->credential = new CreatePinCredential();
     }
     
     public function process($id, $pin){

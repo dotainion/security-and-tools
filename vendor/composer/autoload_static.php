@@ -750,6 +750,7 @@ class ComposerStaticInit71120c75292eae0dbbda1b628875a0f1
         'tools\\infrastructure\\exeptions\\UrlNotFoundException' => __DIR__ . '/../..' . '/tools/infrastructure/exeptions/UrlNotFoundException.php',
         'tools\\module\\login\\factory\\CredentialFactory' => __DIR__ . '/../..' . '/tools/module/login/factory/CredentialFactory.php',
         'tools\\module\\login\\logic\\CreateCredential' => __DIR__ . '/../..' . '/tools/module/login/logic/CreateCredential.php',
+        'tools\\module\\login\\logic\\CreatePinCredential' => __DIR__ . '/../..' . '/tools/module/login/logic/CreatePinCredential.php',
         'tools\\module\\login\\logic\\SendMessage' => __DIR__ . '/../..' . '/tools/module/messages/logic/SendMessage.php',
         'tools\\module\\login\\logic\\UpdateCredential' => __DIR__ . '/../..' . '/tools/module/login/logic/UpdateCredential.php',
         'tools\\module\\login\\objects\\Credential' => __DIR__ . '/../..' . '/tools/module/login/objects/Credential.php',

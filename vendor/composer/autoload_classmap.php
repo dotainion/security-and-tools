@@ -651,6 +651,7 @@ return array(
     'tools\\infrastructure\\exeptions\\UrlNotFoundException' => $baseDir . '/tools/infrastructure/exeptions/UrlNotFoundException.php',
     'tools\\module\\login\\factory\\CredentialFactory' => $baseDir . '/tools/module/login/factory/CredentialFactory.php',
     'tools\\module\\login\\logic\\CreateCredential' => $baseDir . '/tools/module/login/logic/CreateCredential.php',
+    'tools\\module\\login\\logic\\CreatePinCredential' => $baseDir . '/tools/module/login/logic/CreatePinCredential.php',
     'tools\\module\\login\\logic\\SendMessage' => $baseDir . '/tools/module/messages/logic/SendMessage.php',
     'tools\\module\\login\\logic\\UpdateCredential' => $baseDir . '/tools/module/login/logic/UpdateCredential.php',
     'tools\\module\\login\\objects\\Credential' => $baseDir . '/tools/module/login/objects/Credential.php',

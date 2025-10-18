@@ -5,7 +5,7 @@ use tools\infrastructure\exeptions\InvalidRequirementException;
 use tools\infrastructure\ICredential;
 use tools\module\login\repository\CredentialRepository;
 
-class CreateCredential{
+class CreatePinCredential{
     protected CredentialRepository $repo;
 
     public function __construct(){
@@ -14,7 +14,7 @@ class CreateCredential{
 
     public function create(ICredential $credential):void{
         $collector = $this->repo->listHasCredential([
-            'password' => $credential->password()
+            'pin' => $credential->pin()
         ]);
         if($collector->hasItem()){
             throw new InvalidRequirementException('The PIN you entered is already in use. Please try a different one.');
