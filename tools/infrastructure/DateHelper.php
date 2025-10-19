@@ -9,6 +9,7 @@ class DateHelper
 {
     protected string $format = "Y-m-d H:i:s";
     protected DateTime $date;
+    protected static string $timezone = 'America/Grenada';
 
     public function __construct(?string $date=null){
         $date !== null && $this->set($date);
@@ -21,11 +22,23 @@ class DateHelper
     }
 
     private function timezone():DateTimeZone{
-        return new DateTimeZone('Atlantic/Bermuda');
+        return new DateTimeZone(self::$timezone);
+    }
+
+    public static function setTimezone(string $timezone):void{
+        self::$timezone = $timezone;
     }
 
     public function toString():string{
         return $this->__toString();
+    }
+
+    public function toStringAsDateOnly():string{
+        return explode(' ', $this->__toString())[0];
+    }
+
+    public function toStringAsTimeOnly():string{
+        return explode(' ', $this->__toString())[1];
     }
 
     public function new():self{
