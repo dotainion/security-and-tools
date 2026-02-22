@@ -8,6 +8,9 @@ class Collector{
     protected $collected = [];
 
     public function add($item):void{
+        if($item instanceof IObjects && $this->includes($item->id()->toString())){
+            return;
+        }
         $this->collected[] = $item;
     }
 
@@ -75,6 +78,15 @@ class Collector{
             }
         }
         return $collector;
+    }
+
+    public function includes($value, $attr='id'):bool{
+        foreach($this->list() as $record){
+            if($record->$attr()->toString() === $value){
+                return true;
+            }
+        }
+        return false;
     }
 
     public function assertHasItem(string $message='No results'):bool{

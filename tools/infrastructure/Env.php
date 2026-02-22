@@ -58,6 +58,9 @@ class Env{
     }
 
     public static function baseDir(){
+        if(in_array($_SERVER['SERVER_NAME'], ['localhost', '127.0.0.1'])){
+            return '';
+        }
         $directory = str_replace(self::rootDir(), '', __DIR__);
         $directory = str_replace('\\', '/', $directory);
         return array_values(array_filter(explode('/', $directory), fn($dir)=>!empty($dir)))[0];

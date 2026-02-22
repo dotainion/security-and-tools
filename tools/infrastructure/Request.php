@@ -15,6 +15,7 @@ class Request{
         if(empty($this->request) && !empty($_POST)){
             $this->request = $_POST;
         }
+        return $this;
     }
     
     public static function isPost(){
@@ -47,7 +48,21 @@ class Request{
         return $this->request[$attr];
     }
 
+    public function unset(string $attr){
+        unset($this->request[$attr]);
+        return $this;
+    }
+
+    public function set(string $attr, mixed $value){
+        $this->request[$attr] = $value;
+        return $this;
+    }
+
     public function request(){
         return $this->request;
+    }
+
+    public function pagination():Pagination{
+        return new Pagination($this->get('limit'), $this->get('offset'));
     }
 }

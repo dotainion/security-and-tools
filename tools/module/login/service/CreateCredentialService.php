@@ -33,6 +33,7 @@ class CreateCredentialService extends Service{
             'hide' => false,
             'token' => (new Token())->new()->toString(),
             'password' => $passwordObj->toString(),
+            'expire' => null
         ]);
 
         $this->credential->create($credential);
