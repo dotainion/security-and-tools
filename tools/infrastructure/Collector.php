@@ -1,7 +1,9 @@
 <?php
 namespace tools\infrastructure;
 
+use Exception;
 use InvalidArgumentException;
+use src\module\school\objects\Group;
 use tools\infrastructure\exeptions\NoResultsException;
 
 class Collector{
@@ -15,6 +17,9 @@ class Collector{
     }
 
     public function prepend($item):void{
+        if($item instanceof IObjects && $this->includes($item->id()->toString())){
+            return;
+        }
         $this->collected = [$item, ...$this->collected];
     }
 
@@ -73,16 +78,44 @@ class Collector{
     public function filter($attr, $value):Collector{
         $collector = new Collector();
         foreach($this->list() as $item){
-            if($item->$attr() === $value){
+            $content = $item->$attr();
+            if(
+                !is_null($content) && 
+                !is_bool($content) && 
+                !is_string($content) && 
+                method_exists($content, 'toString')
+            ){
+                $content = $item->$attr()->toString();
+            }
+            if($content === $value){
                 $collector->add($item);
             }
         }
-        return $collector;
+        return $this;
+    }
+
+    public function remove(IObjects $item):self{
+        $copies = [];
+        foreach($this->list() as $record){
+            if($record->id()->toString() !== $item->id()->toString()){
+                $copies[] = $record;
+            }
+        }
+        $this->collected = $copies;
+        return $this;
     }
 
     public function includes($value, $attr='id'):bool{
         foreach($this->list() as $record){
-            if($record->$attr()->toString() === $value){
+            if(!method_exists($record, $attr)){
+                throw new Exception('Method not exist in collector records.');
+            }
+            if(
+                method_exists($record->$attr(), 'toString') &&
+                $record->$attr()->toString() === $value || 
+                method_exists($record->$attr(), 'toString') &&
+                $record->$attr() === $value
+            ){
                 return true;
             }
         }
