@@ -1,6 +1,7 @@
 <?php
 namespace tools\module\login\logic;
 
+use tools\infrastructure\ICredential;
 use tools\infrastructure\Id;
 use tools\infrastructure\Password;
 use tools\infrastructure\Token;
@@ -28,5 +29,9 @@ class UpdateCredential{
 
     public function unsetTokenRefreshToken(Id $id, Token $token):void{
         $this->repo->unsetTokenRefreshToken($id, $token);
+    }
+
+    public function setRefreshToken(ICredential $credential):void{
+        $this->repo->updateRefereshToken($credential);
     }
 }

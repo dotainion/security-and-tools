@@ -38,6 +38,15 @@ class CredentialRepository extends Repository{
         $this->execute();
     }
     
+    public function updateRefereshToken(ICredential $creds):void{
+        $this->update('credential')       
+            ->column('expire', $creds->expire()) 
+            ->column('refreshToken', $creds->refreshToken())
+            ->where()
+            ->eq('id', $this->uuid($creds->id()));
+        $this->execute();
+    }
+    
     public function updatePasswordByRefreshToken(Id $id, Password $password, Token $token):void{
         $this->update('credential')        
             ->column('password', $password->toHash())

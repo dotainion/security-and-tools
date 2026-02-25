@@ -6,19 +6,19 @@ use tools\infrastructure\DateHelper;
 use tools\infrastructure\Service;
 use tools\infrastructure\Token;
 use tools\module\login\factory\CredentialFactory;
-use tools\module\login\logic\CreateCredential;
+use tools\module\login\logic\UpdateCredential;
 use tools\module\mail\logic\RecoveryTemplate;
 use tools\module\mail\service\SendMailService;
 
 class SendRecoverEmailService extends Service{
     protected CredentialFactory $factory;
-    protected CreateCredential $credential;
+    protected UpdateCredential $credential;
     protected RecoveryTemplate $template;
 
     public function __construct(){
         parent::__construct(false);
         $this->factory = new CredentialFactory();
-        $this->credential = new CreateCredential();
+        $this->credential = new UpdateCredential();
         $this->template = new RecoveryTemplate();
     }
     
@@ -39,7 +39,7 @@ class SendRecoverEmailService extends Service{
             'recipient' => $email,
         ]]);
 
-        $this->credential->create($credential);
+        $this->credential->setRefreshToken($credential);
         
         return $this->mergeOutput($service);
     }
