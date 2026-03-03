@@ -42,11 +42,12 @@ class Env{
     }
 
     public static function accessPath():?string{
-        return $_SERVER['HTTP_ACCESSPATH']; //green-energy-admin/
+        return $_SERVER['HTTP_ACCESSPATH'];
     }
 
     public static function isAdminHost():bool{
-        return self::accessPath() === '/green-energy-admin/';//todo: need to add admin domain
+        //todo: need a way to get a env data to determin what host it is.
+        return self::accessPath() === self::env('/green-energy-admin/');
     }
 
     public static function ip():string{
@@ -80,7 +81,7 @@ class Env{
     public static function authorizationHeader():?string{
         return self::headers('Authorization');
     }
-
+    
     public static function dotEnv():string{
         return self::rootDir() . '/' . self::baseDir() . '/.env';
     }
@@ -120,23 +121,47 @@ class Env{
         return null;
     }
 
-    public static function server():string{
+    public static function server():?string{
         return self::env('DB_SERVER');
     }
 
-    public static function username():string{
+    public static function username():?string{
         return self::env('DB_USERNAME');
     }
 
-    public static function password():string{
+    public static function password():?string{
         return self::env('DB_PASSWORD');
     }
 
-    public static function database():string{
+    public static function database():?string{
         return self::env('DB_DATABASE');
     }
 
-    public static function stripeSecret():string{
+    public static function stripeSecret():?string{
         return self::env('STRIPE-SECRET');
+    }
+
+    public static function emailAddress():?string{
+        return self::env('DB_EMAIL_ADDRESS');
+    }
+
+    public static function emailPassword():?string{
+        return self::env('DB_EMAIL_PASSWORD');
+    }
+
+    public static function pusherAppKey():?string{
+        return self::env('PUSHER_APP_KEY');
+    }
+
+    public static function pusherAppSecret():?string{
+        return self::env('PUSHER_APP_SECRET');
+    }
+
+    public static function pusherAppId():?string{
+        return self::env('PUSHER_APP_ID');
+    }
+
+    public static function pusherAppCluster():?string{
+        return self::env('PUSHER_APP_CLUSTER');
     }
 }
