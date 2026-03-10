@@ -91,7 +91,7 @@ class Collector{
                 $collector->add($item);
             }
         }
-        return $this;
+        return $collector;
     }
 
     public function remove(IObjects $item):self{
